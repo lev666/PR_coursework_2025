@@ -21,11 +21,11 @@ int main() {
         return 1;
     }
 
-    switch (comm_opt_ptr->opts)
-    {
+    switch (comm_opt_ptr->opts) {
     case 1:
-        /* code */
-        break;
+        if (curr_date(strs) != 0) {
+            return 1;
+        }
     case 2:
         /* code */
         break;
@@ -45,7 +45,6 @@ int main() {
         printf("%s", strs->str_a_len[i].str);
     }
     */
-    // curr_date(strs, &temp_wh);
 
     return 0;
 }
