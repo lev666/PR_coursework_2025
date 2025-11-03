@@ -1,20 +1,27 @@
 #include <ctype.h>
 #include <stdlib.h>
+#include <strings.h>
 
 #include "readaform.h"
 
 unsigned int read_a_format(strs_all* strs) {
     size_t hw = 5;
     size_t lenstr = 30;
-    strs->str_a_len = (strsalen*)malloc(sizeof(strsalen) * hw);
+    strsalen* temp = (strsalen*)malloc(sizeof(strsalen) * hw);
 
-    if (strs->str_a_len == NULL) {
+    if (temp == NULL) {
         fprintf(stdout, "Error: Memory allocation error\n");
         return 1;
     }
+    strs->str_a_len = temp;
 
     for (size_t k = 0; k < hw; k++) {
-        strs->str_a_len[k].str = (char*)malloc(sizeof(char) * lenstr);
+        char* temp_str = (char*)malloc(sizeof(char) * lenstr);
+        if (temp_str == NULL) {
+            fprintf(stdout, "Error: Memory allocation error\n");
+            return 1;
+        }
+        strs->str_a_len[k].str = temp_str;
     }
 
     char c;
@@ -39,12 +46,12 @@ unsigned int read_a_format(strs_all* strs) {
 
         if (curr_hw == hw) {
             hw *= 2;
-            strsalen* temp = (strsalen*)realloc(strs->str_a_len, sizeof(strsalen) * hw);
-            if (temp == NULL) {
+            strsalen* temp2 = (strsalen*)realloc(strs->str_a_len, sizeof(strsalen) * hw);
+            if (temp2 == NULL) {
                     fprintf(stdout, "Error: Memory allocation error\n");
                     return 1;
             }
-            strs->str_a_len = temp;
+            strs->str_a_len = temp2;
 
         }
 
@@ -56,16 +63,39 @@ unsigned int read_a_format(strs_all* strs) {
                     return 1;
             } 
             strs->str_a_len -> str = temp;
-            strs->str_a_len -> lenstr = lenstr;
+            strs->str_a_len[curr_hw].lenstr = lenstr;
         }
+
 
         if (c != '.') {
             strs->str_a_len[curr_hw].str[curr_lenstr++] = c;
         } else {
             strs->str_a_len[curr_hw].str[curr_lenstr++] = c;
-            strs->str_a_len[curr_hw++].str[curr_lenstr] = '\0';
-            curr_lenstr = 0;
+            strs->str_a_len[curr_hw].str[curr_lenstr] = '\0';
+            strs->str_a_len[curr_hw].lenstr = lenstr;
+            size_t duplc = 0;
+            for (size_t k = 0; k < curr_hw; k++) {
+                if (lenstr != strs->str_a_len[k].lenstr) {
+                    continue;
+                }
+
+                if (strcasecmp(strs->str_a_len[curr_hw].str, strs->str_a_len[k].str) == 0) {
+                    duplc = 1;
+                    free(strs->str_a_len[curr_hw].str);
+                    strs->str_a_len[curr_hw].lenstr = 0;
+                    char* temp_str2 = (char*)malloc(sizeof(char) * lenstr);
+                    if (temp_str2 == NULL) {
+                        fprintf(stdout, "Error: Memory allocation error\n");
+                        return 1;
+                    }
+                    strs->str_a_len[curr_hw].str = temp_str2;
+                }
+            }
+            if (duplc != 1) {
+                curr_hw++;
+            }
             lenstr = 30;
+            curr_lenstr = 0;
         }
     }
 
