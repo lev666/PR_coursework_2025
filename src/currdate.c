@@ -13,23 +13,23 @@ unsigned int curr_date(strs_all* strs) {
         return 1;
     }
 
-    for (size_t i = 0; i < strs->total_len; i++) {
-        char* curr_str = strs->str_a_len[i].str;
+    // for (size_t i = 0; i < strs->total_len; i++) {
+    //     char* curr_str = strs->str_a_len[i].str;
 
-        size_t data_c, mounth_c, year_c = 0;
-        size_t temp_ptr = 0;
-        while (*curr_str != '\0') {
-            if (sscanf(curr_str, "%d/%d/%d%n", &data_c, &mounth_c, &year_c, &temp_ptr) == 3) {
-                curr_str += temp_ptr;
-                if (mounth == mounth_c && year == year_c) {
-                    printf("%s\n", strs->str_a_len[i].str);
-                    break;
-                }
-            } else {
-                curr_str++;
-            }
-        }
-    }
+    //     size_t data_c, mounth_c, year_c = 0;
+    //     size_t temp_ptr = 0;
+    //     while (*curr_str != '\0') {
+    //         if (sscanf(curr_str, "%d/%d/%d%n", &data_c, &mounth_c, &year_c, &temp_ptr) == 3) {
+    //             curr_str += temp_ptr;
+    //             if (mounth == mounth_c && year == year_c) {
+    //                 printf("%s\n", strs->str_a_len[i].str);
+    //                 break;
+    //             }
+    //         } else {
+    //             curr_str++;
+    //         }
+    //     }
+    // }
 
-    return 0;
+    // return 0;
 }
