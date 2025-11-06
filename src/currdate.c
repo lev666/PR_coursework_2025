@@ -7,29 +7,29 @@ unsigned int curr_date(strs_all* strs) {
 
     char form_curr_time[11];
     strftime(form_curr_time, 11, "%d/%m/%Y", curr_time);
-    size_t data, mounth, year = 0;
-    if (sscanf(form_curr_time, "%d/%d/%d", &data, &mounth, &year) != 3) {
+    unsigned int data, month, year = 0;
+    if (sscanf(form_curr_time, "%d/%d/%d", &data, &month, &year) != 3) {
         fprintf(stdout, "Error: string formatt error\n");
         return 1;
     }
 
-    // for (size_t i = 0; i < strs->total_len; i++) {
-    //     char* curr_str = strs->str_a_len[i].str;
+    for (size_t i = 0; i < strs->total_len; i++) {
+        size_t temp_count_d = strs->str_a_len[i].date_c;
+        for (size_t j = 0; j < temp_count_d; j++) {
+            size_t temp_inf_d = strs->str_a_len[i].curr_date_str[j].inf;
+            if (temp_inf_d == 1) {
+                break;
+            } else {
+                size_t temp_month_d = strs->str_a_len[i].curr_date_str[j].month;
+                size_t temp_year_d = strs->str_a_len[i].curr_date_str[j].year;
 
-    //     size_t data_c, mounth_c, year_c = 0;
-    //     size_t temp_ptr = 0;
-    //     while (*curr_str != '\0') {
-    //         if (sscanf(curr_str, "%d/%d/%d%n", &data_c, &mounth_c, &year_c, &temp_ptr) == 3) {
-    //             curr_str += temp_ptr;
-    //             if (mounth == mounth_c && year == year_c) {
-    //                 printf("%s\n", strs->str_a_len[i].str);
-    //                 break;
-    //             }
-    //         } else {
-    //             curr_str++;
-    //         }
-    //     }
-    // }
+                if (temp_month_d == month && temp_year_d == year) {
+                    char* curr_sen = strs->str_a_len[i].str;
+                    printf("%s\n", curr_sen);
+                }
+            }
+        }
+    }
 
-    // return 0;
+    return 0;
 }

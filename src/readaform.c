@@ -126,7 +126,6 @@ unsigned int read_a_format(strs_all* strs) {
                         strs->str_a_len[curr_hw].curr_date_str[count_dates_str].day = data_c;
                         strs->str_a_len[curr_hw].curr_date_str[count_dates_str].month = mounth_c;
                         strs->str_a_len[curr_hw].curr_date_str[count_dates_str].year = year_c;
-                        printf("%d/%d/%d", strs->str_a_len[curr_hw].curr_date_str[count_dates_str].day, strs->str_a_len[curr_hw].curr_date_str[count_dates_str].month, strs->str_a_len[curr_hw].curr_date_str[count_dates_str].year);
                         count_dates_str++;
 
                         data_c, mounth_c, year_c = 0;
@@ -136,6 +135,7 @@ unsigned int read_a_format(strs_all* strs) {
                 }
                 if (count_dates_str == 0) {
                     strs->str_a_len[curr_hw].curr_date_str->inf = 1;
+                    strs->str_a_len[curr_hw].date_c = 1;
                 } else {
                     if (count_dates_str < capacity) {
                         dateStrs* temp3 = (dateStrs*)realloc(strs->str_a_len[curr_hw].curr_date_str, sizeof(dateStrs) * count_dates_str);
@@ -144,10 +144,8 @@ unsigned int read_a_format(strs_all* strs) {
                             return 1;
                         }
                         strs->str_a_len[curr_hw].curr_date_str = temp3;
-                        strs->str_a_len[curr_hw].date_c = count_dates_str;
-                    } else {
-                        strs->str_a_len[curr_hw].date_c = count_dates_str;
                     }
+                    strs->str_a_len[curr_hw].date_c = count_dates_str;
                 }
                 curr_hw++;
             }

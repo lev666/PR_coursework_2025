@@ -22,26 +22,26 @@ int main() {
     }
 
     switch (comm_opt_ptr->opts) {
-    case 1:
-        if (curr_date(strs) != 0) {
-            return 1;
+        case 1:
+            if (curr_date(strs) != 0) {
+                return 1;
+            }
+        case 2:
+            /* code */
+            break;
+        case 3:
+            /* code */
+            break;
+        case 4:
+            /* code */
+            break;
+        case 5:
+            /* code */
+            break;
         }
-    case 2:
-        /* code */
-        break;
-    case 3:
-        /* code */
-        break;
-    case 4:
-        /* code */
-        break;
-    case 5:
-        /* code */
-        break;
-    }
 
     /*
-    for (size_t i = 0; i <= strs ->total_len; i++) {
+    for (size_t i = 0; i < strs->total_len; i++) {
         printf("%s", strs->str_a_len[i].str);
     }
     */
