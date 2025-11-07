@@ -1,5 +1,6 @@
 #include "control.h"
 #include "readaform.h"
+#include "minDate.h"
 
 
 int main() {
@@ -27,8 +28,12 @@ int main() {
                 return 1;
             }
         case 2:
-            /* code */
-            break;
+            if (findMinDate(strs) != 0) {
+                return 1;
+            }
+            for (size_t i = 0; i < strs->total_len; i++) {
+                printf("%s", strs->str_a_len[i].str);
+            }
         case 3:
             /* code */
             break;
@@ -39,12 +44,6 @@ int main() {
             /* code */
             break;
         }
-
-    /*
-    for (size_t i = 0; i < strs->total_len; i++) {
-        printf("%s", strs->str_a_len[i].str);
-    }
-    */
 
     return 0;
 }

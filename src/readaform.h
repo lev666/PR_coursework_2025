@@ -14,6 +14,7 @@ typedef struct {
     size_t lenstr;
 
     dateStrs* curr_date_str;
+    dateStrs* minDate;
     size_t date_c;
 
     size_t index_str;
