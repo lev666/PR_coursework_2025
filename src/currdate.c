@@ -16,7 +16,7 @@ unsigned int curr_date(strs_all* strs) {
     for (size_t i = 0; i < strs->total_len; i++) {
         size_t temp_count_d = strs->str_a_len[i].date_c;
         for (size_t j = 0; j < temp_count_d; j++) {
-            size_t temp_inf_d = strs->str_a_len[i].curr_date_str[j].inf;
+            size_t temp_inf_d = strs->str_a_len[i].inf;
             if (temp_inf_d == 1) {
                 break;
             } else {

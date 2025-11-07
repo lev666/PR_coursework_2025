@@ -131,7 +131,7 @@ unsigned int read_a_format(strs_all* strs) {
                 size_t* minDay = &(strs->str_a_len[curr_hw].minDate->day);
                 size_t* minMonth = &(strs->str_a_len[curr_hw].minDate->month);
                 size_t* minYear = &(strs->str_a_len[curr_hw].minDate->year);
-                size_t* minInf = &(strs->str_a_len[curr_hw].minDate->inf);
+                size_t* minInf = &(strs->str_a_len[curr_hw].inf);
 
                 size_t count_dates_str = 0;
 
@@ -164,14 +164,14 @@ unsigned int read_a_format(strs_all* strs) {
                 }
 
                 if (count_dates_str == 0) {
-                    strs->str_a_len[curr_hw].curr_date_str->inf = 1;
+                    strs->str_a_len[curr_hw].inf = 1;
                     *minInf = 1;
                     *minDay = 0;
                     *minMonth = 0;
                     *minYear = 0;
                     strs->str_a_len[curr_hw].date_c = 1;
                 } else {
-                    strs->str_a_len[curr_hw].curr_date_str->inf = 0;
+                    strs->str_a_len[curr_hw].inf = 0;
                     if (count_dates_str < capacity) {
                         dateStrs* temp3 = (dateStrs*)realloc(strs->str_a_len[curr_hw].curr_date_str, sizeof(dateStrs) * count_dates_str);
                         if (temp3 == NULL) {

@@ -3,8 +3,8 @@
 #include <stdlib.h>
 
 int cmp_sents(const void* ptr1, const void* ptr2) {
-    const size_t inf_p1 = ((const strsalen* )ptr1)->minDate->inf;
-    const size_t inf_p2 = ((const strsalen* )ptr2)->minDate->inf;
+    const size_t inf_p1 = ((const strsalen* )ptr1)->inf;
+    const size_t inf_p2 = ((const strsalen* )ptr2)->inf;
 
     const size_t day_p1 = ((const strsalen* )ptr1)->minDate->day;
     const size_t month_p1 = ((const strsalen* )ptr1)->minDate->month;
