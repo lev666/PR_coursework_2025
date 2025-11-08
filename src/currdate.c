@@ -3,7 +3,7 @@
 
 #include "currdate.h"
 
-unsigned int curr_date(strs_all *strs) {
+int curr_date(strs_all *strs) {
   time_t times = time(0);
   struct tm *curr_time = localtime(&times);
 

@@ -19,7 +19,7 @@ int incr_str_arr(strs_all *strs, size_t *hw, size_t curr_hw, size_t lenstr);
 
 int cmp_dates(const dateStrs *ptr1, const dateStrs *ptr2);
 
-unsigned int read_a_format(strs_all *strs) {
+int read_a_format(strs_all *strs) {
   size_t hw = HW_D;
   size_t lenstr = LENSTR_D;
 
@@ -140,6 +140,37 @@ unsigned int read_a_format(strs_all *strs) {
           if (sscanf(curr_str, "%d/%d/%d%ln", &day_c, &mounth_c, &year_c,
                      &temp_ptr) == 3) {
             curr_str += temp_ptr;
+            if (day_c > 0 && mounth_c > 0 && year_c > 0) {
+                if (mounth_c > 12 || day_c > 31) {
+                    continue;
+                }
+
+                if (day_c < 31) {
+                    size_t check_day = 0;
+                    int leap = ((year_c % 4 == 0 && year_c % 100 != 0) || (year_c % 400)); // проверка на вис год
+                    switch (mounth_c) {
+                        case 4:
+                        case 6:
+                        case 9:
+                        case 11:
+                            check_day = day_c > 30 ? 1 : 0;
+                            break;
+                        case 2:
+                            size_t check_leap = leap ? 29 : 28;
+                            check_day = day_c > check_leap ? 1 : 0;
+                            break;
+                        default:
+                            check_day = day_c > 31 ? 1 : 0;
+                    }
+
+                    if (check_day == 1) {
+                        continue;
+                    }
+                }
+            } else {
+                continue;
+            }
+
             if (count_dates_str == capacity_dates) {
               capacity_dates *= 2;
               dateStrs *currDates_p_t = (dateStrs *)realloc(

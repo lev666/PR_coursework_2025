@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "minDate.h"
-#include "readaform.h"
 
 int cmp_sents(const void *ptr1, const void *ptr2) {
   const size_t inf_p1 = ((const strsalen *)ptr1)->inf;
@@ -40,7 +39,7 @@ int cmp_sents(const void *ptr1, const void *ptr2) {
   }
 }
 
-unsigned int findMinDate(strs_all *strs) {
+int findMinDate(strs_all *strs) {
   qsort(strs->str_a_len, strs->total_len, sizeof(strsalen), cmp_sents);
 
   return 0;

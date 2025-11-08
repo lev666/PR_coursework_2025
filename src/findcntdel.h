@@ -1,4 +1,4 @@
 #pragma once
 #include "readaform.h"
 
-int findMinDate(strs_all* strs);
+int find_cnt_del(strs_all* strs);

@@ -3,7 +3,10 @@
 
 #include "control.h"
 #include "minDate.h"
+#include "findcntdel.h"
 #include "readaform.h"
+
+void print_sents(strs_all* strs);
 
 int main() {
   fprintf(stdout, "Course work for option 4.8, created by Lev Beizer\n");
@@ -39,12 +42,14 @@ int main() {
     if (findMinDate_r != 0) {
       return findMinDate_r;
     }
-    for (size_t i = 0; i < strs->total_len; i++) {
-      printf("%s\n", strs->str_a_len[i].str);
-    }
+    print_sents(strs);
     break;
   case 3:
-    /* code */
+    size_t findcntdel_r = find_cnt_del(strs);
+    if (findcntdel_r != 0) {
+      return findcntdel_r;
+    }
+    print_sents(strs);
     break;
   case 4:
     /* code */
@@ -55,4 +60,10 @@ int main() {
   }
 
   return 0;
+}
+
+void print_sents(strs_all* strs) {
+    for (size_t i = 0; i < strs->total_len; i++) {
+        printf("%s\n", strs->str_a_len[i].str);
+    }
 }

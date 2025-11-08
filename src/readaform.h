@@ -23,4 +23,4 @@ typedef struct {
     size_t total_len;
 } strs_all;
 
-unsigned int read_a_format(strs_all* strs);
+int read_a_format(strs_all* strs);

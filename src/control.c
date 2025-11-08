@@ -3,7 +3,7 @@
 
 #include "control.h"
 
-unsigned int inp_oup_ctrl(comms_opts *comm_opt) {
+int inp_oup_ctrl(comms_opts *comm_opt) {
   char buffer[5];
   size_t temp_comm;
 
