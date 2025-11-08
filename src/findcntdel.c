@@ -1,11 +1,11 @@
+#include "findcntdel.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "findcntdel.h"
-
 #define MEMFAIL "Error: Memory allocation error\n"
 
-int find_cnt_del(strs_all* strs) {
+int find_cnt_del(strs_all *strs) {
     size_t c_in_cent = 0;
     size_t shift_ptr = 0;
 
@@ -29,13 +29,15 @@ int find_cnt_del(strs_all* strs) {
             free(strs->str_a_len[i].str);
         } else {
             if (shift_ptr != i) {
-                strs->str_a_len[shift_ptr] = strs->str_a_len[i]; // сдвигаем указатель со след на прошлый
+                strs->str_a_len[shift_ptr] =
+                    strs->str_a_len[i]; // сдвигаем указатель со след на прошлый
             }
             shift_ptr++;
         }
     }
 
-    strsalen* memreduc = (strsalen*)realloc(strs->str_a_len, sizeof(strsalen) * shift_ptr);
+    strsalen *memreduc =
+        (strsalen *)realloc(strs->str_a_len, sizeof(strsalen) * shift_ptr);
     if (memreduc == NULL) {
         fprintf(stdout, MEMFAIL);
         return 1;

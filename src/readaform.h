@@ -12,6 +12,7 @@ typedef struct {
 
     dateStrs* curr_date_str;
     dateStrs* minDate;
+    dateStrs* maxDate;
     size_t inf;
     size_t date_c;
 
