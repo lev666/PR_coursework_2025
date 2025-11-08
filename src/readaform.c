@@ -26,7 +26,7 @@ int read_a_format(strs_all *strs) {
     strsalen *temp_hw_f = (strsalen *)malloc(sizeof(strsalen) * hw);
     if (temp_hw_f == NULL) {
         fprintf(stdout, MEMFAIL);
-        return 1;
+        return 0; // (1)
     }
     strs->str_a_len = temp_hw_f;
 
@@ -34,7 +34,7 @@ int read_a_format(strs_all *strs) {
         char *temp_str_f = (char *)malloc(sizeof(char) * lenstr);
         if (temp_str_f == NULL) {
             fprintf(stdout, MEMFAIL);
-            return 1;
+            return 0; // (1)
         }
         strs->str_a_len[k].str = temp_str_f;
     }
@@ -43,6 +43,7 @@ int read_a_format(strs_all *strs) {
     size_t curr_hw = 0;
     size_t curr_lenstr = 0;
     size_t check_end = 0;
+    size_t check_char = 0;
 
     while (((c = fgetc(stdin)) != EOF) && (check_end != 2)) {
         if (check_end == 1) {
@@ -76,12 +77,19 @@ int read_a_format(strs_all *strs) {
 
         char *str_prs = strs->str_a_len[curr_hw].str;
         strsalen *stralen_p = strs->str_a_len;
+
         if (c != '.') {
+            if (!isalnum(c) && c != '-' && check_char == 0) {
+                continue;
+            } else {
+                check_char = 1;
+            }
             str_prs[curr_lenstr++] = c;
         } else {
             str_prs[curr_lenstr++] = c;
             str_prs[curr_lenstr] = '\0';
             stralen_p[curr_hw].lenstr = lenstr;
+            check_char = 0;
             size_t duplc = 0;
             for (size_t k = 0; k < curr_hw; k++) {
                 if (lenstr != stralen_p[k].lenstr) {
@@ -111,7 +119,7 @@ int read_a_format(strs_all *strs) {
                     (dateStrs *)malloc(sizeof(dateStrs) * capacity_dates);
                 if (curr_dates_p_t == NULL) {
                     fprintf(stdout, MEMFAIL);
-                    return 1;
+                    return 0; // (1)
                 }
                 stralen_p[curr_hw].curr_date_str = curr_dates_p_t;
 
@@ -124,7 +132,7 @@ int read_a_format(strs_all *strs) {
                         (dateStrs *)malloc(sizeof(dateStrs));
                     if (minDate_p_t == NULL) {
                         fprintf(stdout, MEMFAIL);
-                        return 1;
+                        return 0; // (1)
                     }
                     stralen_p[curr_hw].minDate = minDate_p_t;
 
@@ -139,7 +147,7 @@ int read_a_format(strs_all *strs) {
                         (dateStrs *)malloc(sizeof(dateStrs));
                     if (maxDate_p_t == NULL) {
                         fprintf(stdout, MEMFAIL);
-                        return 1;
+                        return 0; // (1)
                     }
                     stralen_p[curr_hw].maxDate = maxDate_p_t;
 
@@ -196,7 +204,7 @@ int read_a_format(strs_all *strs) {
                                 currDates_p, sizeof(dateStrs) * capacity_dates);
                             if (currDates_p_t == NULL) {
                                 fprintf(stdout, MEMFAIL);
-                                return 1;
+                                return 0; // (1)
                             }
                             stralen_p[curr_hw].curr_date_str = currDates_p_t;
                             currDates_p = stralen_p[curr_hw].curr_date_str;
@@ -242,7 +250,7 @@ int read_a_format(strs_all *strs) {
                             currDates_p, sizeof(dateStrs) * count_dates_str);
                         if (arr_trunc_dates_p_t == NULL) {
                             fprintf(stdout, MEMFAIL);
-                            return 1;
+                            return 0; // (1)
                         }
                         stralen_p[curr_hw].curr_date_str = arr_trunc_dates_p_t;
                         currDates_p = arr_trunc_dates_p_t;
@@ -271,7 +279,7 @@ int dupl_rows(strs_all *strs, size_t curr_hw) {
     char *temp_p_dupl = (char *)malloc(sizeof(char) * LENSTR_D);
     if (temp_p_dupl == NULL) {
         fprintf(stdout, MEMFAIL);
-        return 1;
+        return 0; // (1)
     }
     strs->str_a_len[curr_hw].str = temp_p_dupl;
 
@@ -284,7 +292,7 @@ int incr_str_len_arr(strs_all *strs, size_t curr_hw, size_t *lenstr) {
         (char *)realloc(strs->str_a_len[curr_hw].str, sizeof(char) * *lenstr);
     if (temp_p_str_len == NULL) {
         fprintf(stdout, MEMFAIL);
-        return 1;
+        return 0; // (1)
     }
     strs->str_a_len[curr_hw].str = temp_p_str_len;
 
@@ -297,7 +305,7 @@ int incr_str_arr(strs_all *strs, size_t *hw, size_t curr_hw, size_t lenstr) {
         (strsalen *)realloc(strs->str_a_len, sizeof(strsalen) * (*hw));
     if (temp_p_hw == NULL) {
         fprintf(stdout, MEMFAIL);
-        return 1;
+        return 0; // (1)
     }
     strs->str_a_len = temp_p_hw;
     strs->total_len = (*hw);
@@ -306,7 +314,7 @@ int incr_str_arr(strs_all *strs, size_t *hw, size_t curr_hw, size_t lenstr) {
         char *temp_p_str = (char *)malloc(sizeof(char) * lenstr);
         if (temp_p_str == NULL) {
             fprintf(stdout, MEMFAIL);
-            return 1;
+            return 0; // (1)
         }
         strs->str_a_len[j].str = temp_p_str;
     }
@@ -319,7 +327,7 @@ int arr_trunc(strs_all *strs, size_t curr_hw) {
         (strsalen *)realloc(strs->str_a_len, sizeof(strsalen) * curr_hw);
     if (temp_p_trnc == NULL && curr_hw > 0) {
         fprintf(stdout, MEMFAIL);
-        return 1;
+        return 0; // (1)
     }
     strs->str_a_len = temp_p_trnc;
 

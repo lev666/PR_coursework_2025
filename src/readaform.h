@@ -1,4 +1,6 @@
 #pragma once
+#include <stdlib.h>
+
 
 typedef struct {
     int day;

@@ -1,5 +1,7 @@
 #pragma once
 #include "currdate.h"
+#include <stdlib.h>
+
 
 typedef struct {
     size_t opts : 3;

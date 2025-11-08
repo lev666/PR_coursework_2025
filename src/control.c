@@ -15,15 +15,15 @@ int inp_oup_ctrl(comms_opts *comm_opt) {
                 fprintf(stdout, "Error: incorrect input %ld\n",
                         temp_comm); /* Вообще, лучше ошибки выводить в stderr,
                                     но ТЗ требует иное */
-                return 1;
+                return 0;           // (1)
             }
         } else {
             fprintf(stdout, "Error: incorrect input\n");
-            return 1;
+            return 0;
         }
     } else {
         fprintf(stdout, "Error: incorrect input\n");
-        return 1;
+        return 0;
     }
 
     return 0;

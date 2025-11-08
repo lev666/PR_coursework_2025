@@ -17,7 +17,7 @@ int main() {
     comms_opts *comm_opt_ptr_t = (comms_opts *)malloc(sizeof(comms_opts));
     if (comm_opt_ptr_t == NULL) {
         fprintf(stdout, "Error: Memory allocation error\n");
-        return 1;
+        return 0; // по условию ТЗ везде 0 (1)
     }
     comms_opts *comm_opt_ptr = comm_opt_ptr_t;
 
@@ -26,19 +26,23 @@ int main() {
         return inp_oup_ctrl_r;
     }
 
-    size_t read_a_format_r = read_a_format(strs);
-    if (read_a_format_r) {
-        return read_a_format_r;
-    }
-
+    size_t read_a_format_r = 0;
     switch (comm_opt_ptr->opts) {
     case 1:
+        read_a_format_r = read_a_format(strs);
+        if (read_a_format_r) {
+            return read_a_format_r;
+        }
         size_t curr_date_r = curr_date(strs);
         if (curr_date_r) {
             return curr_date_r;
         }
         break;
     case 2:
+        read_a_format_r = read_a_format(strs);
+        if (read_a_format_r) {
+            return read_a_format_r;
+        }
         size_t findMinDate_r = findMinDate(strs);
         if (findMinDate_r) {
             return findMinDate_r;
@@ -46,6 +50,10 @@ int main() {
         print_sents(strs);
         break;
     case 3:
+        read_a_format_r = read_a_format(strs);
+        if (read_a_format_r) {
+            return read_a_format_r;
+        }
         size_t findcntdel_r = find_cnt_del(strs);
         if (findcntdel_r) {
             return findcntdel_r;
@@ -53,13 +61,17 @@ int main() {
         print_sents(strs);
         break;
     case 4:
+        read_a_format_r = read_a_format(strs);
+        if (read_a_format_r) {
+            return read_a_format_r;
+        }
         size_t max_min_date_r = max_min_date(strs);
         if (max_min_date_r) {
             return max_min_date_r;
         }
         break;
     case 5:
-        /* code */
+
         break;
     }
 

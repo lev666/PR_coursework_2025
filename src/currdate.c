@@ -12,7 +12,7 @@ int curr_date(strs_all *strs) {
     int data, month, year = -1;
     if (sscanf(form_curr_time, "%d/%d/%d", &data, &month, &year) != 3) {
         fprintf(stdout, "Error: string formatt error\n");
-        return 1;
+        return 0; // (1)
     }
 
     for (size_t i = 0; i < strs->total_len; i++) {

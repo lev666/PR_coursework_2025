@@ -40,7 +40,7 @@ int find_cnt_del(strs_all *strs) {
         (strsalen *)realloc(strs->str_a_len, sizeof(strsalen) * shift_ptr);
     if (memreduc == NULL) {
         fprintf(stdout, MEMFAIL);
-        return 1;
+        return 0; // (1)
     }
     strs->str_a_len = memreduc;
 
