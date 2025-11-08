@@ -1,49 +1,58 @@
-#include "control.h"
-#include "readaform.h"
-#include "minDate.h"
+#include <stdio.h>
+#include <stdlib.h>
 
+#include "control.h"
+#include "minDate.h"
+#include "readaform.h"
 
 int main() {
-    fprintf(stdout, "Course work for option 4.8, created by Lev Beizer\n");
+  fprintf(stdout, "Course work for option 4.8, created by Lev Beizer\n");
 
-    comms_opts* comm_opt_ptr = (comms_opts*)malloc(sizeof(comms_opts));
-    strs_all* strs = (strs_all*)malloc(sizeof(strs_all));
+  strs_all *strs = (strs_all *)malloc(sizeof(strs_all));
 
-    if (comm_opt_ptr == NULL) {
-        fprintf(stdout, "Error: Memory allocation error\n");
-        return 1;
+  comms_opts *comm_opt_ptr_t = (comms_opts *)malloc(sizeof(comms_opts));
+  if (comm_opt_ptr_t == NULL) {
+    fprintf(stdout, "Error: Memory allocation error\n");
+    return 1;
+  }
+  comms_opts *comm_opt_ptr = comm_opt_ptr_t;
+
+  size_t inp_oup_ctrl_r = inp_oup_ctrl(comm_opt_ptr);
+  if (inp_oup_ctrl_r != 0) {
+    return inp_oup_ctrl_r;
+  }
+
+  size_t read_a_format_r = read_a_format(strs);
+  if (read_a_format_r != 0) {
+    return read_a_format_r;
+  }
+
+  switch (comm_opt_ptr->opts) {
+  case 1:
+    size_t curr_date_r = curr_date(strs);
+    if (curr_date_r != 0) {
+      return curr_date_r;
     }
-
-    if (inp_oup_ctrl(comm_opt_ptr) != 0) {
-        return 1;
+    break;
+  case 2:
+    size_t findMinDate_r = findMinDate(strs);
+    if (findMinDate_r != 0) {
+      return findMinDate_r;
     }
-    
-    if (read_a_format(strs) != 0) {
-        return 1;
+    for (size_t i = 0; i < strs->total_len; i++) {
+      printf("%s\n", strs->str_a_len[i].str);
     }
+    break;
+  case 3:
+    /* code */
+    break;
+  case 4:
+    /* code */
+    break;
+  case 5:
+    /* code */
+    break;
+  }
 
-    switch (comm_opt_ptr->opts) {
-        case 1:
-            if (curr_date(strs) != 0) {
-                return 1;
-            }
-        case 2:
-            if (findMinDate(strs) != 0) {
-                return 1;
-            }
-            for (size_t i = 0; i < strs->total_len; i++) {
-                printf("%s", strs->str_a_len[i].str);
-            }
-        case 3:
-            /* code */
-            break;
-        case 4:
-            /* code */
-            break;
-        case 5:
-            /* code */
-            break;
-        }
-
-    return 0;
+  return 0;
 }

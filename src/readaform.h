@@ -1,10 +1,9 @@
 #pragma once
-#include <stdio.h>
 
 typedef struct {
-    size_t day;
-    size_t month;
-    size_t year;
+    int day;
+    int month;
+    int year;
 } dateStrs;
 
 typedef struct {

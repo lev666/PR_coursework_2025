@@ -1,222 +1,289 @@
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
 
 #include "readaform.h"
 
-int cmp_dates(const dateStrs* ptr1, const dateStrs* ptr2);
+#define LENSTR_D 30
+#define HW_D 5
+#define MEMFAIL "Error: Memory allocation error\n"
 
-unsigned int read_a_format(strs_all* strs) {
-    size_t hw = 5;
-    size_t lenstr = 30;
-    strsalen* temp = (strsalen*)malloc(sizeof(strsalen) * hw);
+int dupl_rows(strs_all *strs, size_t curr_hw);
 
-    if (temp == NULL) {
-        fprintf(stdout, "Error: Memory allocation error\n");
-        return 1;
+int incr_str_len_arr(strs_all *strs, size_t curr_hw, size_t *lenstr);
+
+int arr_trunc(strs_all *strs, size_t curr_hw);
+
+int incr_str_arr(strs_all *strs, size_t *hw, size_t curr_hw, size_t lenstr);
+
+int cmp_dates(const dateStrs *ptr1, const dateStrs *ptr2);
+
+unsigned int read_a_format(strs_all *strs) {
+  size_t hw = HW_D;
+  size_t lenstr = LENSTR_D;
+
+  strsalen *temp_hw_f = (strsalen *)malloc(sizeof(strsalen) * hw);
+  if (temp_hw_f == NULL) {
+    fprintf(stdout, MEMFAIL);
+    return 1;
+  }
+  strs->str_a_len = temp_hw_f;
+
+  for (size_t k = 0; k < hw; k++) {
+    char *temp_str_f = (char *)malloc(sizeof(char) * lenstr);
+    if (temp_str_f == NULL) {
+      fprintf(stdout, MEMFAIL);
+      return 1;
     }
-    strs->str_a_len = temp;
+    strs->str_a_len[k].str = temp_str_f;
+  }
 
-    for (size_t k = 0; k < hw; k++) {
-        char* temp_str = (char*)malloc(sizeof(char) * lenstr);
-        if (temp_str == NULL) {
-            fprintf(stdout, "Error: Memory allocation error\n");
+  char c;
+  size_t curr_hw = 0;
+  size_t curr_lenstr = 0;
+  size_t check_end = 0;
+
+  while (((c = fgetc(stdin)) != EOF) && (check_end != 2)) {
+    if (check_end == 1) {
+      if (c == '\n') {
+        check_end++;
+        continue;
+      } else {
+        check_end = 0;
+      }
+    }
+
+    if (c == '\n') {
+      check_end++;
+      continue;
+    }
+
+    if (curr_hw == hw) {
+      size_t incr_str_arr_r = incr_str_arr(strs, &hw, curr_hw, lenstr);
+      if (incr_str_arr_r != 0) {
+        return incr_str_arr_r;
+      }
+    }
+
+    if (curr_lenstr + 1 == lenstr) {
+      size_t incr_str_len_arr_r = incr_str_len_arr(strs, curr_hw, &lenstr);
+      if (incr_str_len_arr_r != 0) {
+        return incr_str_len_arr_r;
+      }
+    }
+
+    char *str_prs = strs->str_a_len[curr_hw].str;
+    strsalen *stralen_p = strs->str_a_len;
+    if (c != '.') {
+      str_prs[curr_lenstr++] = c;
+    } else {
+      str_prs[curr_lenstr++] = c;
+      str_prs[curr_lenstr] = '\0';
+      stralen_p[curr_hw].lenstr = lenstr;
+      size_t duplc = 0;
+      for (size_t k = 0; k < curr_hw; k++) {
+        if (lenstr != stralen_p[k].lenstr) {
+          continue;
+        }
+
+        if (strcasecmp(str_prs, stralen_p[k].str) == 0) {
+          duplc = 1;
+          size_t dupl_rows_r = dupl_rows(strs, curr_hw);
+          if (dupl_rows_r != 0) {
+            return dupl_rows_r;
+          }
+        }
+      }
+
+      if (duplc != 1) {
+        char *curr_str = str_prs;
+        size_t *idx_str = &(stralen_p[curr_hw].index_str);
+        *idx_str = curr_hw;
+
+        unsigned int day_c, mounth_c, year_c = 0;
+        size_t temp_ptr = 0;
+
+        size_t capacity_dates = 5;
+
+        dateStrs *curr_dates_p_t =
+            (dateStrs *)malloc(sizeof(dateStrs) * capacity_dates);
+        if (curr_dates_p_t == NULL) {
+          fprintf(stdout, MEMFAIL);
+          return 1;
+        }
+        stralen_p[curr_hw].curr_date_str = curr_dates_p_t;
+
+        int *minDay = NULL;
+        int *minMonth = NULL;
+        int *minYear = NULL;
+        size_t *minInf = &(stralen_p[curr_hw].inf);
+        if (stralen_p[curr_hw].minDate == NULL) {
+          dateStrs *minDate_p_t = (dateStrs *)malloc(sizeof(dateStrs));
+          if (minDate_p_t == NULL) {
+            fprintf(stdout, MEMFAIL);
             return 1;
-        }
-        strs->str_a_len[k].str = temp_str;
-    }
+          }
+          stralen_p[curr_hw].minDate = minDate_p_t;
 
-    char c;
-    size_t curr_hw = 0;
-    size_t curr_lenstr = 0;
-    size_t check_end = 0;
+          minDay = &(stralen_p[curr_hw].minDate->day);
+          minMonth = &(stralen_p[curr_hw].minDate->month);
+          minYear = &(stralen_p[curr_hw].minDate->year);
 
-    while (((c = fgetc(stdin)) != EOF) && (check_end != 2)) {
-        if (check_end == 1) {
-            if (c == '\n') {
-                check_end++;
-                continue;
-            } else {
-                check_end = 0;
-            }
-        }
-        
-        if (c == '\n') {
-            check_end++;
-            continue;
+          *minDay = *minMonth = *minYear = -1;
         }
 
-        if (curr_hw == hw) {
-            hw *= 2;
-            strsalen* temp2 = (strsalen*)realloc(strs->str_a_len, sizeof(strsalen) * hw);
-            if (temp2 == NULL) {
-                    fprintf(stdout, "Error: Memory allocation error\n");
-                    return 1;
-            }
-            strs->str_a_len = temp2;
-            strs->total_len = hw;
+        size_t count_dates_str = 0;
 
-            for (size_t j = curr_hw; j < hw; j++) {
-                char* temp6 = (char*)malloc(sizeof(char) * lenstr);
-                if (temp6 == NULL) {
-                    fprintf(stdout, "Error: Memory allocation error\n");
-                    return 1;
-                }
-                strs->str_a_len[j].str = temp6;
+        dateStrs *currDates_p = stralen_p[curr_hw].curr_date_str;
+        while (*curr_str != '\0') {
+          if (sscanf(curr_str, "%d/%d/%d%ln", &day_c, &mounth_c, &year_c,
+                     &temp_ptr) == 3) {
+            curr_str += temp_ptr;
+            if (count_dates_str == capacity_dates) {
+              capacity_dates *= 2;
+              dateStrs *currDates_p_t = (dateStrs *)realloc(
+                  currDates_p, sizeof(dateStrs) * capacity_dates);
+              if (currDates_p_t == NULL) {
+                fprintf(stdout, MEMFAIL);
+                return 1;
+              }
+              stralen_p[curr_hw].curr_date_str = currDates_p_t;
+              currDates_p = stralen_p[curr_hw].curr_date_str;
             }
 
+            if (*minDay == -1 && *minMonth == -1 && *minYear == -1) {
+              *minDay = day_c;
+              *minMonth = mounth_c;
+              *minYear = year_c;
+            } else if (cmp_dates(&(currDates_p[count_dates_str]),
+                                 stralen_p[curr_hw].minDate) < 0) {
+              *minDay = day_c;
+              *minMonth = mounth_c;
+              *minYear = year_c;
+            }
+            currDates_p[count_dates_str].day = day_c;
+            currDates_p[count_dates_str].month = mounth_c;
+            currDates_p[count_dates_str].year = year_c;
+            count_dates_str++;
+
+            day_c = mounth_c = year_c = 0;
+          } else {
+            curr_str++;
+          }
         }
 
-        if (curr_lenstr + 1 == lenstr) {
-            lenstr *= 2;
-            char* temp4 = (char*)realloc(strs->str_a_len[curr_hw].str, sizeof(char) * lenstr);
-            if (temp4 == NULL) {
-                    fprintf(stdout, "Error: Memory allocation error\n");
-                    return 1;
-            } 
-            strs->str_a_len[curr_hw].str = temp4;
-        }
-
-
-        if (c != '.') {
-            strs->str_a_len[curr_hw].str[curr_lenstr++] = c;
+        if (count_dates_str == 0) {
+          stralen_p[curr_hw].inf = 1;
+          *minInf = 1;
+          *minDay = *minMonth = *minYear = -1;
+          stralen_p[curr_hw].date_c = 1;
         } else {
-            strs->str_a_len[curr_hw].str[curr_lenstr++] = c;
-            strs->str_a_len[curr_hw].str[curr_lenstr] = '\0';
-            strs->str_a_len[curr_hw].lenstr = lenstr;
-            size_t duplc = 0;
-            for (size_t k = 0; k < curr_hw; k++) {
-                if (lenstr != strs->str_a_len[k].lenstr) {
-                    continue;
-                }
-
-                if (strcasecmp(strs->str_a_len[curr_hw].str, strs->str_a_len[k].str) == 0) {
-                    duplc = 1;
-                    free(strs->str_a_len[curr_hw].str);
-                    strs->str_a_len[curr_hw].lenstr = 0;
-                    char* temp_str2 = (char*)malloc(sizeof(char) * 30); // по умолчанию 30 для всех строк
-                    if (temp_str2 == NULL) {
-                        fprintf(stdout, "Error: Memory allocation error\n");
-                        return 1;
-                    }
-                    strs->str_a_len[curr_hw].str = temp_str2;
-                }
+          stralen_p[curr_hw].inf = 0;
+          if (count_dates_str < capacity_dates) {
+            dateStrs *arr_trunc_dates_p_t = (dateStrs *)realloc(
+                currDates_p, sizeof(dateStrs) * count_dates_str);
+            if (arr_trunc_dates_p_t == NULL) {
+              fprintf(stdout, MEMFAIL);
+              return 1;
             }
-
-            if (duplc != 1) {
-                char* curr_str = strs->str_a_len[curr_hw].str;
-                strs->str_a_len[curr_hw].index_str = curr_hw;
-
-                unsigned int day_c, mounth_c, year_c = 0;
-                size_t temp_ptr = 0;
-
-                size_t capacity = 5;
-
-                strs->str_a_len[curr_hw].curr_date_str = (dateStrs*)malloc(sizeof(dateStrs) * capacity);
-                if (strs->str_a_len[curr_hw].curr_date_str == NULL) { // исправь корректную обработку 
-                    fprintf(stdout, "Error: Memory allocation error\n");
-                    return 1;
-                }
-                if (strs->str_a_len[curr_hw].minDate == NULL) {
-                    dateStrs* tempss = (dateStrs*)malloc(sizeof(dateStrs));
-                    if (tempss == NULL) {
-                        fprintf(stdout, "Error: Memory allocation error\n");
-                        return 1;
-                    }
-                    strs->str_a_len[curr_hw].minDate = tempss;
-                    strs->str_a_len[curr_hw].minDate->day = 0;
-                    strs->str_a_len[curr_hw].minDate->month = 0;
-                    strs->str_a_len[curr_hw].minDate->year = 0;
-                }
-                size_t* minDay = &(strs->str_a_len[curr_hw].minDate->day);
-                size_t* minMonth = &(strs->str_a_len[curr_hw].minDate->month);
-                size_t* minYear = &(strs->str_a_len[curr_hw].minDate->year);
-                size_t* minInf = &(strs->str_a_len[curr_hw].inf);
-
-                size_t count_dates_str = 0;
-
-                while (*curr_str != '\0') {
-                    if (sscanf(curr_str, "%d/%d/%d%n", &day_c, &mounth_c, &year_c, &temp_ptr) == 3) {
-                        curr_str += temp_ptr;
-                        if (count_dates_str == capacity) { // исправь корр обр
-                            capacity *= 2;
-                            strs->str_a_len[curr_hw].curr_date_str = (dateStrs*)realloc(strs->str_a_len[curr_hw].curr_date_str, sizeof(dateStrs) * capacity);
-                        }
-                        
-                        if (*minDay == 0 && *minMonth == 0 && *minYear == 0) {
-                            *minDay = day_c;
-                            *minMonth = mounth_c;
-                            *minYear = year_c;
-                        } else if (cmp_dates(&(strs->str_a_len[curr_hw].curr_date_str[count_dates_str]), strs->str_a_len[curr_hw].minDate) < 0) {
-                            *minDay = day_c;
-                            *minMonth = mounth_c;
-                            *minYear = year_c;  
-                        }
-                        strs->str_a_len[curr_hw].curr_date_str[count_dates_str].day = day_c;
-                        strs->str_a_len[curr_hw].curr_date_str[count_dates_str].month = mounth_c;
-                        strs->str_a_len[curr_hw].curr_date_str[count_dates_str].year = year_c;
-                        count_dates_str++;
-
-                        day_c, mounth_c, year_c = 0;
-                    } else {
-                        curr_str++;
-                    }
-                }
-
-                if (count_dates_str == 0) {
-                    strs->str_a_len[curr_hw].inf = 1;
-                    *minInf = 1;
-                    *minDay = 0;
-                    *minMonth = 0;
-                    *minYear = 0;
-                    strs->str_a_len[curr_hw].date_c = 1;
-                } else {
-                    strs->str_a_len[curr_hw].inf = 0;
-                    if (count_dates_str < capacity) {
-                        dateStrs* temp3 = (dateStrs*)realloc(strs->str_a_len[curr_hw].curr_date_str, sizeof(dateStrs) * count_dates_str);
-                        if (temp3 == NULL) {
-                            fprintf(stdout, "Error: Memory allocation error\n");
-                            return 1;
-                        }
-                        strs->str_a_len[curr_hw].curr_date_str = temp3;
-                    }
-                    strs->str_a_len[curr_hw].date_c = count_dates_str;
-                }
-                curr_hw++;
-            }
-            lenstr = 30;
-            curr_lenstr = 0;
+            stralen_p[curr_hw].curr_date_str = arr_trunc_dates_p_t;
+            currDates_p = arr_trunc_dates_p_t;
+          }
+          stralen_p[curr_hw].date_c = count_dates_str;
         }
+        curr_hw++;
+      }
+      lenstr = 30;
+      curr_lenstr = 0;
     }
+  }
 
-    if (curr_hw < hw) {
-        strsalen* temps = (strsalen*)realloc(strs->str_a_len, sizeof(strsalen) * curr_hw);
-        if (temps == NULL && curr_hw > 0) {
-            fprintf(stdout, "Error: Memory allocation error\n");
-            return 1;
-        }
-        strs->str_a_len = temps;
-    }
-    strs->total_len = curr_hw;
+  if (curr_hw < hw) {
+    arr_trunc(strs, curr_hw);
+  }
+  size_t *totallen = &(strs->total_len);
+  *totallen = curr_hw;
 
-    return 0;
+  return 0;
 }
 
-int cmp_dates(const dateStrs* ptr1, const dateStrs* ptr2) {
-    const size_t day_p1 = ptr1->day;
-    const size_t month_p1 = ptr1->month;
-    const size_t year_p1 = ptr1->year;
-    const size_t day_p2 = ptr2->day;
-    const size_t month_p2 = ptr2->month;
-    const size_t year_p2 = ptr2->year;
+int dupl_rows(strs_all *strs, size_t curr_hw) {
+  free(strs->str_a_len[curr_hw].str);
+  strs->str_a_len[curr_hw].lenstr = 0;
+  char *temp_p_dupl = (char *)malloc(sizeof(char) * LENSTR_D);
+  if (temp_p_dupl == NULL) {
+    fprintf(stdout, MEMFAIL);
+    return 1;
+  }
+  strs->str_a_len[curr_hw].str = temp_p_dupl;
 
-    if (year_p1 != year_p2) {
-        return year_p1 - year_p2;
-    } else if (month_p1 != month_p2) {
-        return month_p1 - month_p2;
-    } else if (day_p1 != day_p2) {
-        return day_p1 - day_p2;
+  return 0;
+}
+
+int incr_str_len_arr(strs_all *strs, size_t curr_hw, size_t *lenstr) {
+  *lenstr *= 2;
+  char *temp_p_str_len =
+      (char *)realloc(strs->str_a_len[curr_hw].str, sizeof(char) * *lenstr);
+  if (temp_p_str_len == NULL) {
+    fprintf(stdout, MEMFAIL);
+    return 1;
+  }
+  strs->str_a_len[curr_hw].str = temp_p_str_len;
+
+  return 0;
+}
+
+int incr_str_arr(strs_all *strs, size_t *hw, size_t curr_hw, size_t lenstr) {
+  *hw *= 2;
+  strsalen *temp_p_hw =
+      (strsalen *)realloc(strs->str_a_len, sizeof(strsalen) * (*hw));
+  if (temp_p_hw == NULL) {
+    fprintf(stdout, MEMFAIL);
+    return 1;
+  }
+  strs->str_a_len = temp_p_hw;
+  strs->total_len = (*hw);
+
+  for (size_t j = curr_hw; j < (*hw); j++) {
+    char *temp_p_str = (char *)malloc(sizeof(char) * lenstr);
+    if (temp_p_str == NULL) {
+      fprintf(stdout, MEMFAIL);
+      return 1;
     }
+    strs->str_a_len[j].str = temp_p_str;
+  }
 
-    return 0;
+  return 0;
+}
+
+int arr_trunc(strs_all *strs, size_t curr_hw) {
+  strsalen *temp_p_trnc =
+      (strsalen *)realloc(strs->str_a_len, sizeof(strsalen) * curr_hw);
+  if (temp_p_trnc == NULL && curr_hw > 0) {
+    fprintf(stdout, MEMFAIL);
+    return 1;
+  }
+  strs->str_a_len = temp_p_trnc;
+
+  return 0;
+}
+
+int cmp_dates(const dateStrs *ptr1, const dateStrs *ptr2) {
+  const size_t day_p1 = ptr1->day;
+  const size_t month_p1 = ptr1->month;
+  const size_t year_p1 = ptr1->year;
+  const size_t day_p2 = ptr2->day;
+  const size_t month_p2 = ptr2->month;
+  const size_t year_p2 = ptr2->year;
+
+  if (year_p1 != year_p2) {
+    return year_p1 - year_p2;
+  } else if (month_p1 != month_p2) {
+    return month_p1 - month_p2;
+  } else if (day_p1 != day_p2) {
+    return day_p1 - day_p2;
+  }
+
+  return 0;
 }
