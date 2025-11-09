@@ -11,10 +11,10 @@ int max_min_date(strs_all *strs) {
         const size_t inf = strs->str_a_len[i].inf;
 
         if (inf != 1) {
-            printf("Earliest date: %02d/%02d/%04d\n", minDate->day,
-                   minDate->month, minDate->year);
-            printf("Latest date: %02d/%02d/%04d\n", maxDate->day,
-                   maxDate->month, maxDate->year);
+            fprintf(stdout, "Earliest date: %02d/%02d/%04d\n", minDate->day,
+                    minDate->month, minDate->year);
+            fprintf(stdout, "Latest date: %02d/%02d/%04d\n", maxDate->day,
+                    maxDate->month, maxDate->year);
         }
     }
 

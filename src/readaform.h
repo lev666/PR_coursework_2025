@@ -1,6 +1,6 @@
 #pragma once
-#include <stdlib.h>
 
+#include <stdlib.h>
 
 typedef struct {
     int day;
@@ -27,3 +27,7 @@ typedef struct {
 } strs_all;
 
 int read_a_format(strs_all* strs);
+
+void* malloc_ptr(size_t size);
+
+void* realloc_ptr(void* ptr, size_t size);

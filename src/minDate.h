@@ -1,6 +1,7 @@
 #pragma once
-#include "readaform.h"
-#include <stdlib.h>
 
+#include "readaform.h"
+
+#include <stdlib.h>
 
 int findMinDate(strs_all* strs);

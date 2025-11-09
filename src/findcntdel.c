@@ -36,13 +36,8 @@ int find_cnt_del(strs_all *strs) {
         }
     }
 
-    strsalen *memreduc =
-        (strsalen *)realloc(strs->str_a_len, sizeof(strsalen) * shift_ptr);
-    if (memreduc == NULL) {
-        fprintf(stdout, MEMFAIL);
-        return 0; // (1)
-    }
-    strs->str_a_len = memreduc;
+    strs->str_a_len =
+        realloc_ptr(strs->str_a_len, sizeof(strsalen) * shift_ptr);
 
     strs->total_len = shift_ptr;
 
