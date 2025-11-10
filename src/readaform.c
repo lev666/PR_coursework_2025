@@ -9,6 +9,9 @@
 #define HW_D 5
 #define MEMFAIL "Error: Memory allocation error\n"
 
+Boolean True = TRUE;
+Boolean False = FALSE;
+
 int check_dates(int day_c, int month_c, int year_c);
 
 int incr_str_arr(strs_all *strs, size_t *hw, size_t curr_hw, size_t lenstr);
@@ -36,7 +39,7 @@ int read_a_format(strs_all *strs) {
     size_t check_char = 0;
 
     while (((c = fgetc(stdin)) != EOF) && (check_end != 2)) {
-        if (check_end == 1) {
+        if (check_end == True) {
             if (c == '\n') {
                 check_end++;
                 continue;
@@ -56,7 +59,7 @@ int read_a_format(strs_all *strs) {
                 return incr_str_arr_r;
         }
 
-        if (curr_lenstr + 1 == lenstr) {
+        if (curr_lenstr + 1 == lenstr) { // прибавление 1 с учётом конца
             lenstr *= 2;
             strs->str_a_len[curr_hw].str = realloc_ptr(
                 strs->str_a_len[curr_hw].str, sizeof(char) * lenstr);
@@ -66,24 +69,24 @@ int read_a_format(strs_all *strs) {
         strsalen *stralen_p = strs->str_a_len;
 
         if (c != '.') {
-            if (!isalnum(c) && c != '-' && check_char == 0) {
+            if (!isalnum(c) && c != '-' && check_char == False) {
                 continue;
             } else {
-                check_char = 1;
+                check_char = True;
             }
             str_prs[curr_lenstr++] = c;
         } else {
             str_prs[curr_lenstr++] = c;
             str_prs[curr_lenstr] = '\0';
             stralen_p[curr_hw].lenstr = lenstr;
-            check_char = 0;
-            size_t duplc = 0;
+            check_char = False;
+            size_t duplc = False;
             for (size_t k = 0; k < curr_hw; k++) {
                 if (lenstr != stralen_p[k].lenstr)
                     continue;
 
                 if (strcasecmp(str_prs, stralen_p[k].str) == 0) {
-                    duplc = 1;
+                    duplc = True;
                     free(strs->str_a_len[curr_hw].str);
                     strs->str_a_len[curr_hw].lenstr = 0;
                     strs->str_a_len[curr_hw].str =
@@ -91,7 +94,7 @@ int read_a_format(strs_all *strs) {
                 }
             }
 
-            if (duplc != 1) {
+            if (duplc != True) {
                 char *curr_str = str_prs;
                 size_t *idx_str = &(stralen_p[curr_hw].index_str);
                 *idx_str = curr_hw;
@@ -175,12 +178,11 @@ int read_a_format(strs_all *strs) {
                 }
 
                 if (count_dates_str == 0) {
-                    stralen_p[curr_hw].inf = 1;
-                    *inf_str = 1;
+                    *inf_str = True;
                     *minDay_str = *minMonth_str = *minYear_str = -1;
-                    stralen_p[curr_hw].date_c = 1;
+                    stralen_p[curr_hw].date_c = 1; // inf
                 } else {
-                    stralen_p[curr_hw].inf = 0;
+                    *inf_str = False;
                     if (count_dates_str < capacity_dates) {
                         stralen_p[curr_hw].curr_date_str = realloc_ptr(
                             currDates_p, sizeof(dateStrs) * count_dates_str);
@@ -205,10 +207,10 @@ int read_a_format(strs_all *strs) {
     return 0;
 }
 
-int check_dates(int day_c, int month_c, int year_c) {
+int check_dates(const int day_c, const int month_c, const int year_c) {
     if (day_c > 0 && month_c > 0 && year_c > 0) {
         if (month_c > 12 || day_c > 31)
-            return 1;
+            return True;
 
         if (day_c < 31) {
             size_t check_day = 0;
@@ -220,23 +222,23 @@ int check_dates(int day_c, int month_c, int year_c) {
             case 6:
             case 9:
             case 11:
-                check_day = day_c > 30 ? 1 : 0;
+                check_day = day_c > 30 ? True : False;
                 break;
             case 2:
                 int check_leap = leap ? 29 : 28;
-                check_day = day_c > check_leap ? 1 : 0;
+                check_day = day_c > check_leap ? True : False;
                 break;
             default:
-                check_day = day_c > 31 ? 1 : 0;
+                check_day = day_c > 31 ? True : False;
             }
 
             if (check_day)
-                return 1;
+                return True;
         } else
-            return 1;
+            return True;
     }
 
-    return 0;
+    return False;
 }
 
 void *malloc_ptr(size_t size) {

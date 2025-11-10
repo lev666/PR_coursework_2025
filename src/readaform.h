@@ -26,6 +26,11 @@ typedef struct {
     size_t total_len;
 } strs_all;
 
+typedef enum {
+    FALSE,
+    TRUE
+} Boolean;
+
 int read_a_format(strs_all* strs);
 
 void* malloc_ptr(size_t size);
