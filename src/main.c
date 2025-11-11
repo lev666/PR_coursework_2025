@@ -7,9 +7,16 @@
 #include "minDate.h"
 #include "readaform.h"
 
+#define MEMFREEFAIL "Error: Memory is not free\n"
+
+#define BLUE "\033[1;34m"
+#define RESETCOLOR "\033[0m"
+
 void print_sents(strs_all *strs);
 
 void help_comm();
+
+int free_strs(strs_all* strs);
 
 int main() {
     fprintf(stdout, "Course work for option 4.8, created by Lev Beizer\n");
@@ -69,6 +76,11 @@ int main() {
         break;
     }
 
+    if (command != 5) {
+        size_t free_strs_r = free_strs(strs);
+        if (free_strs_r) return free_strs_r;
+    }
+
     return 0;
 }
 
@@ -79,21 +91,48 @@ void print_sents(strs_all *strs) {
 }
 
 void help_comm() {
-    puts("Команды от 1 до 5:\n\n"
-         "1\n"
+    printf("%1$sКоманды от 1 до 5:%2$s\n\n"
+         "  %1$s1%2$s\n"
          "Все предложения в которых есть дата с текущим годом и\n"
          "месяцем. (дата записывается в формате DD/MM/YYYY)\n\n"
-         "2\n"
+         "  %1$s2%2$s\n"
          "Отсортированые предложения по увеличению минимальной даты в них.\n"
          "Если в предложении нет даты, то следует считать, что 'мнимая\n"
          "минимальная дата' == inf. В случае равенства сохранить порядок\n"
          "вхождения.\n\n"
-         "3\n"
+         "  %1$s3%2$s\n"
          "Удалить все предложения в которых все даты относятся к 19 веку.\n\n"
-         "4\n"
+         "  %1$s4%2$s\n"
          "Для каждого предложения выводит самую раннюю и позднюю дату.\n"
          "Предложения не выводятся, только строки в формате:"
          "'Earliest date: <date>' и 'Latest date: <date>'.\n\n"
-         "5\n"
-         "Справка об функциях исполняемой программы.");
+         "  %1$s5%2$s\n"
+         "Справка об функциях исполняемой программы.\n", BLUE, RESETCOLOR);
+}
+
+int free_strs(strs_all* strs) {
+    if (strs->str_a_len != NULL) {
+        for (size_t i = 0; i < strs->total_len; i++) {
+            if (strs->str_a_len[i].str != NULL) {
+                free(strs->str_a_len[i].str);
+            } else {
+                fprintf(stdout, MEMFREEFAIL);
+                return 0;
+            } 
+            if (strs->str_a_len[i].curr_date_str != NULL) {
+                free(strs->str_a_len[i].curr_date_str);
+                free(strs->str_a_len[i].minDate);
+                free(strs->str_a_len[i].maxDate);
+            } else {
+                fprintf(stdout, MEMFREEFAIL);
+                return 0;
+            }
+        }
+        free(strs->str_a_len);
+    } else {
+        fprintf(stdout, MEMFREEFAIL);
+        return 0;
+    }
+
+    return 0;
 }

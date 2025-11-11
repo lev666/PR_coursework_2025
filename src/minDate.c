@@ -32,8 +32,8 @@ int cmp_sents(const void *ptr1, const void *ptr2) {
         return day_p1 - day_p2;
     }
 
-    if (idx_p1 >
-        idx_p2) { // случай, если даты равны (сохранение вхождения по индексам)
+    if (idx_p1 > idx_p2) {  // случай, если даты равны 
+                            // (сохранение вхождения по индексам)
         return 1;
     } else {
         return -1;
