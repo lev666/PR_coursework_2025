@@ -3,6 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * @file control.c
+ * @brief Исходник отвечающий за чтение ввода из stdin.
+ */
+
 int inp_oup_ctrl(comms_opts *comm_opt) {
     char buffer[5];
     size_t temp_comm;

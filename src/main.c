@@ -9,15 +9,41 @@
 
 #define MEMFREEFAIL "Error: Memory is not free\n"
 
-#define BLUE "\033[1;34m"
-#define RESETCOLOR "\033[0m"
+#define BLUE "\033[1;34m" /**< Синий цвет форматирования */
+#define RESETCOLOR "\033[0m" /**< Возврат цвета */
 
+/**
+ * @file main.c
+ * @brief Является корнем программы и вызовом основных функций.
+ */
+
+/**
+ * @brief Объявление функции вывода строк.
+ *
+ * @param strs Входная структура текста.
+ */
 void print_sents(strs_all *strs);
 
+/**
+ * @brief Объявление функции вызова справочной информации.
+*/
 void help_comm();
 
+/**
+ * @brief Объявление функции свобождения памяти.
+ * 
+ * @param strs Входная структура текста.
+ * @return Код возврата состояния.
+ * @see main()
+ */
 int free_strs(strs_all* strs);
 
+/**
+ * @brief Главная функция исполнения.
+ *
+ * @return Код возврата состояния. (по ТЗ он 0)
+ * @note По ТЗ код возврата всегда 0, но лучше иная обарботка (0, 1...).
+ */
 int main() {
     fprintf(stdout, "Course work for option 4.8, created by Lev Beizer\n");
 
@@ -26,7 +52,7 @@ int main() {
     comms_opts *comm_opt_ptr_t = (comms_opts *)malloc(sizeof(comms_opts));
     if (comm_opt_ptr_t == NULL) {
         fprintf(stdout, "Error: Memory allocation error\n");
-        return 0; // по условию ТЗ везде 0 (1)
+        return 0;
     }
     comms_opts *comm_opt_ptr = comm_opt_ptr_t;
 

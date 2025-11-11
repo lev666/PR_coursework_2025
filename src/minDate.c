@@ -3,6 +3,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * @file minDate.c
+ * @brief Исходник отвечающий за нахождение поздней и ранней даты.
+ */
+
+ /**
+ * @brief Объявление функции-компаратора.
+ * 
+ * @return Возвращает 1, 0, -1 (в зависимости от знака).
+ * @param ptr1 Входная структура строки сравнимого.
+ * @param ptr2 Входная структура строки сравнителя.
+ * @warning Не рекомендуется менять проверку для случая равенста! 
+ * @warning (Из-за логики работы qsort и условия ТЗ)
+ */
 int cmp_sents(const void *ptr1, const void *ptr2) {
     const size_t inf_p1 = ((const strsalen *)ptr1)->inf;
     const size_t inf_p2 = ((const strsalen *)ptr2)->inf;

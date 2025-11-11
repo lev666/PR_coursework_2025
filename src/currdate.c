@@ -3,6 +3,11 @@
 #include <stdio.h>
 #include <time.h>
 
+/**
+ * @file currdate.c
+ * @brief Исходник отвечающий за нахождение предложенией с вхождением текущей даты.
+ */
+
 int curr_date(strs_all *strs) {
     time_t times = time(0);
     struct tm *curr_time = localtime(&times);
@@ -12,7 +17,7 @@ int curr_date(strs_all *strs) {
     int data, month, year = -1;
     if (sscanf(form_curr_time, "%d/%d/%d", &data, &month, &year) != 3) {
         fprintf(stdout, "Error: string formatt error\n");
-        return 0; // (1)
+        return 0;
     }
 
     for (size_t i = 0; i < strs->total_len; i++) {

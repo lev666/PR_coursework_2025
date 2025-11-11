@@ -5,6 +5,11 @@
 
 #define MEMFAIL "Error: Memory allocation error\n"
 
+/**
+ * @file findcntdel.c
+ * @brief Исходник отвечающий за нахождение вхождения 19 века.
+ */
+
 int find_cnt_del(strs_all *strs) {
     size_t c_in_cent = 0;
     size_t shift_ptr = 0;

@@ -4,6 +4,11 @@
 
 #include "readaform.h"
 
+/**
+ * @file maxmindate.c
+ * @brief Исходник отвечающий за нахождение поздней и ранней даты.
+ */
+
 int max_min_date(strs_all *strs) {
     for (size_t i = 0; i < strs->total_len; i++) {
         dateStrs *maxDate = strs->str_a_len[i].maxDate;

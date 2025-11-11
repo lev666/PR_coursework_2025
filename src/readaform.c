@@ -5,17 +5,46 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#define LENSTR_D 30
-#define HW_D 5
+#define LENSTR_D 30 /**< длина строки по умолчанию */
+#define HW_D 5 /**< Кол-во строк по умолчанию */
 #define MEMFAIL "Error: Memory allocation error\n"
 
-Boolean True = TRUE;
-Boolean False = FALSE;
+Boolean True = TRUE; /**< <1> */
+Boolean False = FALSE; /**< <0> */
 
+/**
+ * @file readaform.c
+ * @brief Исходник отвечающий за нформирование строк в массив.
+ */
+
+ /**
+ * @brief Объявление функции проверки даты.
+ * 
+ * @return Возвращает код состояния @see main()
+ * @param day_c Текущий день (по итерации).
+ * @param month_c Текущий месяц (по итерации).
+ * @param year_c Текущий год (по итерации).
+ */
 int check_dates(int day_c, int month_c, int year_c);
 
+ /**
+ * @brief Объявление функции увеличения кол-ва строк.
+ * 
+ * @return Возвращает код состояния @see main()
+ * @param strs Входная структура текста.
+ * @param hw Максимальное кол-во строк.
+ * @param curr_hw Текущая строка.
+ * @param lenstr Длина строки.
+ */
 int incr_str_arr(strs_all *strs, size_t *hw, size_t curr_hw, size_t lenstr);
 
+ /**
+ * @brief Объявление функции-компаратора.
+ * 
+ * @return Возвращает 1, 0, -1 (в зависимости от знака).
+ * @param ptr1 Входная структура строки сравнимого.
+ * @param ptr2 Входная структура строки сравнителя.
+ */
 int cmp_dates(const dateStrs *ptr1, const dateStrs *ptr2);
 
 void *malloc_ptr(size_t size);
