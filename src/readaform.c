@@ -133,11 +133,15 @@ int read_a_format(strs_all *strs) {
 
                 size_t capacity_dates = 5;
 
+                stralen_p[curr_hw].curr_date_str = NULL;
+                stralen_p[curr_hw].minDate = NULL;
+                stralen_p[curr_hw].maxDate = NULL;
+
                 stralen_p[curr_hw].curr_date_str =
                     malloc_ptr(sizeof(dateStrs) * capacity_dates);
 
-                int *minDay_str, *minMonth_str, *minYear_str = NULL;
-                int *maxDay_str, *maxMonth_str, *maxYear_str = NULL;
+                int *minDay_str = NULL, *minMonth_str = NULL, *minYear_str = NULL;
+                int *maxDay_str = NULL, *maxMonth_str = NULL, *maxYear_str = NULL;
 
                 size_t *inf_str = &(stralen_p[curr_hw].inf);
                 if (stralen_p[curr_hw].minDate == NULL) {
@@ -179,7 +183,7 @@ int read_a_format(strs_all *strs) {
                         }
 
                         if (cmp_dates(&(currDates_p[count_dates_str]),
-                                      stralen_p[curr_hw].maxDate) > 0) {
+                                      stralen_p[curr_hw].maxDate) <= 0) {
                             *maxDay_str = dayCurr_str;
                             *maxMonth_str = monthCurr_str;
                             *maxYear_str = yearCurr_str;
@@ -190,7 +194,7 @@ int read_a_format(strs_all *strs) {
                             *minMonth_str = monthCurr_str;
                             *minYear_str = yearCurr_str;
                         } else if (cmp_dates(&(currDates_p[count_dates_str]),
-                                             stralen_p[curr_hw].minDate) < 0) {
+                                             stralen_p[curr_hw].minDate) >= 0) {
                             *minDay_str = dayCurr_str;
                             *minMonth_str = monthCurr_str;
                             *minYear_str = yearCurr_str;
@@ -230,7 +234,7 @@ int read_a_format(strs_all *strs) {
         strs->str_a_len =
             realloc_ptr(strs->str_a_len, sizeof(strsalen) * curr_hw);
     }
-    size_t *totallen = &(strs->total_len);
+    size_t *totallen = &(strs->total_len); // ?
     *totallen = curr_hw;
 
     return 0;

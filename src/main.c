@@ -47,7 +47,7 @@ int free_strs(strs_all* strs);
 int main() {
     fprintf(stdout, "Course work for option 4.8, created by Lev Beizer\n");
 
-    strs_all *strs = (strs_all *)malloc(sizeof(strs_all));
+    strs_all *strs = NULL;
 
     comms_opts *comm_opt_ptr_t = (comms_opts *)malloc(sizeof(comms_opts));
     if (comm_opt_ptr_t == NULL) {
@@ -64,6 +64,11 @@ int main() {
     size_t command = comm_opt_ptr->opts;
 
     if (command > 0 && command < 5) {
+        strs = (strs_all *)malloc(sizeof(strs_all));
+        if (strs == NULL) {
+            fprintf(stdout, "Error: Memory allocation error\n");
+            return 0;
+        }
         size_t read_a_format_r = read_a_format(strs);
         if (read_a_format_r) {
             return read_a_format_r;
@@ -137,7 +142,7 @@ void help_comm() {
 }
 
 int free_strs(strs_all* strs) {
-    if (strs->str_a_len != NULL) {
+    if (strs != NULL && strs->str_a_len != NULL) {
         for (size_t i = 0; i < strs->total_len; i++) {
             if (strs->str_a_len[i].str != NULL) {
                 free(strs->str_a_len[i].str);
@@ -155,6 +160,7 @@ int free_strs(strs_all* strs) {
             }
         }
         free(strs->str_a_len);
+        free(strs);
     } else {
         fprintf(stdout, MEMFREEFAIL);
         return 0;
