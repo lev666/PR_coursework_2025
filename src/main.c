@@ -144,26 +144,13 @@ void help_comm() {
 int free_strs(strs_all* strs) {
     if (strs != NULL && strs->str_a_len != NULL) {
         for (size_t i = 0; i < strs->total_len; i++) {
-            if (strs->str_a_len[i].str != NULL) {
-                free(strs->str_a_len[i].str);
-            } else {
-                fprintf(stdout, MEMFREEFAIL);
-                return 0;
-            } 
-            if (strs->str_a_len[i].dates_str != NULL) {
-                free(strs->str_a_len[i].dates_str);
-                free(strs->str_a_len[i].minDate);
-                free(strs->str_a_len[i].maxDate);
-            } else {
-                fprintf(stdout, MEMFREEFAIL);
-                return 0;
-            }
+            free(strs->str_a_len[i].str);
+            free(strs->str_a_len[i].dates_str);
+            free(strs->str_a_len[i].minDate);
+            free(strs->str_a_len[i].maxDate);
         }
         free(strs->str_a_len);
         free(strs);
-    } else {
-        fprintf(stdout, MEMFREEFAIL);
-        return 0;
     }
 
     return 0;

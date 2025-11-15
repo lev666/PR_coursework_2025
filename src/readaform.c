@@ -82,14 +82,15 @@ int read_a_format(strs_all *strs) {
                 return incr_str_arr_r;
         }
 
-        if (curr_lenstr + 1 == lenstr) { // прибавление 1 с учётом конца
-            lenstr *= 2;
-            strs->str_a_len[curr_hw].str = realloc_ptr(
-                strs->str_a_len[curr_hw].str, sizeof(char) * lenstr);
-        }
-
         char *str_prs = strs->str_a_len[curr_hw].str;
         strsalen *stralen_p = strs->str_a_len;
+
+        if (curr_lenstr + 1 == lenstr) { // прибавление 1 с учётом конца
+            lenstr *= 2;
+            str_prs = realloc_ptr(
+                str_prs, sizeof(char) * lenstr);
+            strs->str_a_len[curr_hw].str = str_prs;
+        }
 
         if (c != '.') {
             if (!isalnum(c) && c != '-' && check_char == False) {
@@ -99,7 +100,24 @@ int read_a_format(strs_all *strs) {
             }
             str_prs[curr_lenstr++] = c;
         } else {
+            char next_point_symbol = fgetc(stdin);
             str_prs[curr_lenstr++] = c;
+
+            if (next_point_symbol == '.') {
+                str_prs[curr_lenstr++] = next_point_symbol;
+                while ((next_point_symbol = fgetc(stdin)) == '.') {
+                    str_prs[curr_lenstr++] = next_point_symbol;
+                    if (curr_lenstr + 2 == lenstr) { // прибавление 2 с учётом конца + возврат
+                        lenstr *= 2;
+                        str_prs = realloc_ptr(
+                            str_prs, sizeof(char) * lenstr);
+                        strs->str_a_len[curr_hw].str = str_prs;
+                    }
+                }
+                ungetc(next_point_symbol, stdin);
+                continue;
+            }
+            
             str_prs[curr_lenstr] = '\0';
             stralen_p[curr_hw].lenstr = lenstr;
             check_char = False;
@@ -110,10 +128,11 @@ int read_a_format(strs_all *strs) {
 
                 if (strcasecmp(str_prs, stralen_p[k].str) == 0) {
                     duplc = True;
-                    free(strs->str_a_len[curr_hw].str);
-                    strs->str_a_len[curr_hw].lenstr = 0;
-                    strs->str_a_len[curr_hw].str =
-                        malloc_ptr(sizeof(char) * LENSTR_D);
+                    free(str_prs);
+                    stralen_p[curr_hw].lenstr = 0;
+                    str_prs = malloc_ptr(sizeof(char) * LENSTR_D);
+                    strs->str_a_len[curr_hw].str = str_prs;
+                    break;
                 }
             }
 
@@ -166,8 +185,9 @@ int read_a_format(strs_all *strs) {
                         curr_str += temp_ptr;
 
                         if (check_dates(dayCurr_str, monthCurr_str,
-                                        yearCurr_str))
+                                        yearCurr_str)) {
                             continue;
+                        }
 
                         if (count_dates_str == capacity_dates) {
                             capacity_dates *= 2;
@@ -243,7 +263,7 @@ int check_dates(const int day_c, const int month_c, const int year_c) {
         if (month_c > 12 || day_c > 31)
             return True;
 
-        if (day_c < 31) {
+        if (day_c <= 31) {
             size_t check_day = 0;
             int leap = ((year_c % 4 == 0 && year_c % 100 != 0) ||
                         (year_c % 400) == 0); // проверка на вис год
@@ -267,6 +287,8 @@ int check_dates(const int day_c, const int month_c, const int year_c) {
                 return True;
         } else
             return True;
+    } else {
+        return True;
     }
 
     return False;

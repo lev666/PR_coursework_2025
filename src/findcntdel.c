@@ -31,6 +31,7 @@ int find_cnt_del(strs_all *strs) {
         if (c_in_cent == temp_count_d) {
             free(strs->str_a_len[i].dates_str);
             free(strs->str_a_len[i].minDate);
+            free(strs->str_a_len[i].maxDate);
             free(strs->str_a_len[i].str);
         } else {
             if (shift_ptr != i) {
