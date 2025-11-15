@@ -21,7 +21,7 @@ int find_cnt_del(strs_all *strs) {
             if (temp_inf_d == 1) {
                 break;
             } else {
-                int temp_year_d = strs->str_a_len[i].curr_date_str[j].year;
+                int temp_year_d = strs->str_a_len[i].dates_str[j].year;
 
                 if (temp_year_d >= 1801 && temp_year_d < 1901) {
                     c_in_cent++;
@@ -29,7 +29,7 @@ int find_cnt_del(strs_all *strs) {
             }
         }
         if (c_in_cent == temp_count_d) {
-            free(strs->str_a_len[i].curr_date_str);
+            free(strs->str_a_len[i].dates_str);
             free(strs->str_a_len[i].minDate);
             free(strs->str_a_len[i].str);
         } else {

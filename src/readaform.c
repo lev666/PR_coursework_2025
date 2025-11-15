@@ -68,16 +68,10 @@ int read_a_format(strs_all *strs) {
     size_t check_char = 0;
 
     while (((c = fgetc(stdin)) != EOF) && (check_end != 2)) {
-        if (check_end == True) {
-            if (c == '\n') {
-                check_end++;
-                continue;
-            } else {
+        if (c == '\n') {
+            if (check_end != True) {
                 check_end = 0;
             }
-        }
-
-        if (c == '\n') {
             check_end++;
             continue;
         }
@@ -128,16 +122,16 @@ int read_a_format(strs_all *strs) {
                 size_t *idx_str = &(stralen_p[curr_hw].index_str);
                 *idx_str = curr_hw;
 
-                int dayCurr_str, monthCurr_str, yearCurr_str = 0;
+                int dayCurr_str = 0, monthCurr_str = 0, yearCurr_str = 0;
                 size_t temp_ptr = 0;
 
                 size_t capacity_dates = 5;
 
-                stralen_p[curr_hw].curr_date_str = NULL;
+                stralen_p[curr_hw].dates_str = NULL;
                 stralen_p[curr_hw].minDate = NULL;
                 stralen_p[curr_hw].maxDate = NULL;
 
-                stralen_p[curr_hw].curr_date_str =
+                stralen_p[curr_hw].dates_str =
                     malloc_ptr(sizeof(dateStrs) * capacity_dates);
 
                 int *minDay_str = NULL, *minMonth_str = NULL, *minYear_str = NULL;
@@ -165,7 +159,7 @@ int read_a_format(strs_all *strs) {
 
                 size_t count_dates_str = 0;
 
-                dateStrs *currDates_p = stralen_p[curr_hw].curr_date_str;
+                dateStrs *currDates_p = stralen_p[curr_hw].dates_str;
                 while (*curr_str != '\0') {
                     if (sscanf(curr_str, "%d/%d/%d%ln", &dayCurr_str,
                                &monthCurr_str, &yearCurr_str, &temp_ptr) == 3) {
@@ -177,13 +171,17 @@ int read_a_format(strs_all *strs) {
 
                         if (count_dates_str == capacity_dates) {
                             capacity_dates *= 2;
-                            stralen_p[curr_hw].curr_date_str = realloc_ptr(
+                            stralen_p[curr_hw].dates_str = realloc_ptr(
                                 currDates_p, sizeof(dateStrs) * capacity_dates);
-                            currDates_p = stralen_p[curr_hw].curr_date_str;
+                            currDates_p = stralen_p[curr_hw].dates_str;
                         }
 
+                        currDates_p[count_dates_str].day = dayCurr_str;
+                        currDates_p[count_dates_str].month = monthCurr_str;
+                        currDates_p[count_dates_str].year = yearCurr_str;
+
                         if (cmp_dates(&(currDates_p[count_dates_str]),
-                                      stralen_p[curr_hw].maxDate) <= 0) {
+                                      stralen_p[curr_hw].maxDate) > 0) {
                             *maxDay_str = dayCurr_str;
                             *maxMonth_str = monthCurr_str;
                             *maxYear_str = yearCurr_str;
@@ -194,14 +192,11 @@ int read_a_format(strs_all *strs) {
                             *minMonth_str = monthCurr_str;
                             *minYear_str = yearCurr_str;
                         } else if (cmp_dates(&(currDates_p[count_dates_str]),
-                                             stralen_p[curr_hw].minDate) >= 0) {
+                                             stralen_p[curr_hw].minDate) < 0) {
                             *minDay_str = dayCurr_str;
                             *minMonth_str = monthCurr_str;
                             *minYear_str = yearCurr_str;
                         }
-                        currDates_p[count_dates_str].day = dayCurr_str;
-                        currDates_p[count_dates_str].month = monthCurr_str;
-                        currDates_p[count_dates_str].year = yearCurr_str;
                         count_dates_str++;
 
                         dayCurr_str = monthCurr_str = yearCurr_str = 0;
@@ -217,9 +212,9 @@ int read_a_format(strs_all *strs) {
                 } else {
                     *inf_str = False;
                     if (count_dates_str < capacity_dates) {
-                        stralen_p[curr_hw].curr_date_str = realloc_ptr(
+                        stralen_p[curr_hw].dates_str = realloc_ptr(
                             currDates_p, sizeof(dateStrs) * count_dates_str);
-                        currDates_p = stralen_p[curr_hw].curr_date_str;
+                        currDates_p = stralen_p[curr_hw].dates_str;
                     }
                     stralen_p[curr_hw].date_c = count_dates_str;
                 }
@@ -231,10 +226,13 @@ int read_a_format(strs_all *strs) {
     }
 
     if (curr_hw < hw) {
+        for (size_t j = curr_hw; j < hw; j++) {
+            free(strs->str_a_len[j].str);
+        }
         strs->str_a_len =
             realloc_ptr(strs->str_a_len, sizeof(strsalen) * curr_hw);
     }
-    size_t *totallen = &(strs->total_len); // ?
+    size_t *totallen = &(strs->total_len);
     *totallen = curr_hw;
 
     return 0;

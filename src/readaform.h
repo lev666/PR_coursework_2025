@@ -25,7 +25,7 @@ typedef struct {
     char* str; /**< указатель на строку */
     size_t lenstr; /**< длина строки */
 
-    dateStrs* curr_date_str; /**< Указатель на все вхождения дат в строку */
+    dateStrs* dates_str; /**< Указатель на все вхождения дат в строку */
     dateStrs* minDate; /**< Указатель на минимальную дату */
     dateStrs* maxDate; /**< Указатель на максимальную дату */
     size_t inf; /**< Флаг бесконечности */

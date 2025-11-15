@@ -150,8 +150,8 @@ int free_strs(strs_all* strs) {
                 fprintf(stdout, MEMFREEFAIL);
                 return 0;
             } 
-            if (strs->str_a_len[i].curr_date_str != NULL) {
-                free(strs->str_a_len[i].curr_date_str);
+            if (strs->str_a_len[i].dates_str != NULL) {
+                free(strs->str_a_len[i].dates_str);
                 free(strs->str_a_len[i].minDate);
                 free(strs->str_a_len[i].maxDate);
             } else {

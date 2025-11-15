@@ -27,8 +27,8 @@ int curr_date(strs_all *strs) {
             if (temp_inf_d == 1) {
                 break;
             } else {
-                int temp_month_d = strs->str_a_len[i].curr_date_str[j].month;
-                int temp_year_d = strs->str_a_len[i].curr_date_str[j].year;
+                int temp_month_d = strs->str_a_len[i].dates_str[j].month;
+                int temp_year_d = strs->str_a_len[i].dates_str[j].year;
 
                 if (temp_month_d == month && temp_year_d == year) {
                     char *curr_sen = strs->str_a_len[i].str;
