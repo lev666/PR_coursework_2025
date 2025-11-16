@@ -1,4 +1,5 @@
 # PR_coursework_2025
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/lev666/PR_coursework_2025/blob/main/LICENSE)
 ***Term paper for the fall semester, 1st year, in the subject Programming***
 
 # Task option 4.8 (technical specifications)
@@ -81,7 +82,15 @@ Course work for option <V>, created by <Name> <Surname>.
     Удаляет все сгенерированные файлы (`.o`, `.d`) из папки `build/` и итоговые бинарники.
 
 * `make doxy`
-    Генерация документации с помощью Doxygen
+    Генерация документации с помощью Doxygen.
     
 * `make doxy_pdf`
-    Генерация документации с помощью Doxygen в формате pdf
+    Генерация документации с помощью Doxygen в формате pdf.
+    
+## Генерация документации
+
+Для корректной работы генерации документации через Doxygen требуется его установленная версия на локальном устройтсве.
+
+## Дисклеймер
+
+Данный проект является исключительно практикой в образовательных целях и [я](https://github.com/lev666) не несу никакой ответственности за ваши данные при использовании моего проекта
