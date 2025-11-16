@@ -45,7 +45,7 @@ int free_strs(strs_all* strs);
  * @note По ТЗ код возврата всегда 0, но лучше иная обарботка (0, 1...).
  */
 int main() {
-    fprintf(stdout, "Course work for option 4.8, created by Lev Beizer\n");
+    fprintf(stdout, "Course work for option 4.8, created by Lev Beizer.\n");
 
     strs_all *strs = NULL;
 
