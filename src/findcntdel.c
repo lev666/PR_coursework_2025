@@ -40,6 +40,7 @@ int find_cnt_del(strs_all *strs) {
             }
             shift_ptr++;
         }
+        c_in_cent = 0;
     }
 
     strs->str_a_len =
