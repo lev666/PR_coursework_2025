@@ -16,4 +16,4 @@
  * @param strs Входная структура текста.
  * @see @ref funcnum Входная функция под номером 2.
  */
-int findMinDate(strs_all* strs);
+ErrCode findMinDate(strs_all* strs);

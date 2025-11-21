@@ -5,7 +5,8 @@
 
 /**
  * @file currdate.c
- * @brief Исходник отвечающий за нахождение предложенией с вхождением текущей даты.
+ * @brief Исходник отвечающий за нахождение предложенией с вхождением текущей
+ * даты.
  */
 
 int curr_date(strs_all *strs) {
@@ -16,22 +17,22 @@ int curr_date(strs_all *strs) {
     strftime(form_curr_time, 11, "%d/%m/%Y", curr_time);
     int data, month, year = -1;
     if (sscanf(form_curr_time, "%d/%d/%d", &data, &month, &year) != 3) {
-        fprintf(stdout, "Error: string formatt error\n");
+        fprintf(stdout, "Error: string format error\n");
         return 0;
     }
 
     for (size_t i = 0; i < strs->total_len; i++) {
-        size_t temp_count_d = strs->str_a_len[i].date_c;
+        size_t temp_count_d = strs->str_inform[i].date_c;
         for (size_t j = 0; j < temp_count_d; j++) {
-            size_t temp_inf_d = strs->str_a_len[i].inf;
+            size_t temp_inf_d = strs->str_inform[i].inf;
             if (temp_inf_d == 1) {
                 break;
             } else {
-                int temp_month_d = strs->str_a_len[i].dates_str[j].month;
-                int temp_year_d = strs->str_a_len[i].dates_str[j].year;
+                int temp_month_d = strs->str_inform[i].dates_str[j].month;
+                int temp_year_d = strs->str_inform[i].dates_str[j].year;
 
                 if (temp_month_d == month && temp_year_d == year) {
-                    char *curr_sen = strs->str_a_len[i].str;
+                    char *curr_sen = strs->str_inform[i].str;
                     printf("%s\n", curr_sen);
                 }
             }

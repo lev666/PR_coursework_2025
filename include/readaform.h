@@ -31,15 +31,15 @@ typedef struct {
     size_t inf; /**< Флаг бесконечности */
     size_t date_c; /**< Количество вхождений дат в строку */
 
-    size_t index_str; /**< Индекс первоначального вхождения предложений (до форматирования) */
-} strsalen;
+    size_t index_str; /**< Индекс первоначального вхождения предложения (до форматирования) */
+} str_inform_t;
 
 /**
  * @brief Структура для хранения информации о строках и их количестве.
  * @note Это typedef для анонимной структуры.
  */
 typedef struct {
-    strsalen* str_a_len; /**< Указатель на строки */
+    str_inform_t* str_inform; /**< Указатель на строки */
     size_t total_len; /**< Количество строк */
 } strs_all;
 
@@ -53,12 +53,24 @@ typedef enum {
 } Boolean;
 
 /**
+ * @brief Перечисление для состояния кодов возврата.
+ * @note Это typedef для анонимного перечисления.
+ * @note По ТЗ всегда будет SUCCESS.
+ */
+typedef enum {
+    SUCCESS, /**< <0> */
+    ERR_MALLOC, /**< <1> */
+    ERR_REALLOC, /**< <2> */
+    ERR_INVALID_ARG /**< <3> */
+} ErrCode;
+
+/**
  * @brief Объявление функции для создания связного списка и заполнения.
  * 
  * @return Возвращает код состояния @see main()
  * @param strs Входная структура текста.
  */
-int read_a_format(strs_all* strs);
+ErrCode read_a_format(strs_all* strs);
 
 /**
  * @brief Объявление функции для выделения памяти под Dynamic array.
