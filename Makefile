@@ -18,7 +18,7 @@ DEPS_REL = $(OBJ_REL:.o=.d)
 OBJ_DBG = $(patsubst src/%.c, $(DBG_DIR)/%.o, $(SOURCES))
 DEPS_DBG = $(OBJ_DBG:.o=.d)
 
-.PHONY: all clean tests debug doxy doxy_pdf
+.PHONY: all clean tests debug doxy doxy_pdf clang_format
 
 all: $(EXEC_REL)
 
@@ -46,9 +46,12 @@ $(DBG_DIR)/%.o: src/%.c
 	mkdir -p $(DBG_DIR)
 	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) -c $< -o $@
 
+clang_format: $(SOURCE_FILES_DIST)
+	clang-format -style=file -i $(SOURCE_FILES_DIST)
+
 
 clean:
-	rm -rf $(BUILD_DIR) $(EXEC_REL) $(EXEC_DBG) docs
+	rm -rf $(BUILD_DIR) $(EXEC_REL) $(EXEC_DBG) docs/latex docs/html
 
 help:
 	@echo "Доступные команды:"
