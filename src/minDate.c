@@ -37,6 +37,14 @@ int cmp_sents(const void *ptr1, const void *ptr2) {
     if (inf_p1 != 1 && inf_p2 == 1) {
         return -1;
     }
+    if (inf_p1 == 1 && inf_p2 == 1) {
+        if (idx_p1 > idx_p2) { // случай, если даты равны
+            // (сохранение вхождения по индексам)
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 
     if (year_p1 != year_p2) {
         return year_p1 - year_p2;

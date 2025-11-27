@@ -39,6 +39,7 @@ typedef struct {
  * @note Это typedef для анонимной структуры.
  */
 typedef struct {
+    char* str_inp;
     str_inform_t* str_inform; /**< Указатель на строки */
     size_t total_len; /**< Количество строк */
 } strs_all;

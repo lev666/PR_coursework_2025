@@ -22,6 +22,9 @@ int curr_date(strs_all *strs) {
     }
 
     for (size_t i = 0; i < strs->total_len; i++) {
+        if (strs->str_inform[i].inf == 1 || strs->str_inform[i].date_c == 0) {
+            continue;
+        }
         size_t temp_count_d = strs->str_inform[i].date_c;
         for (size_t j = 0; j < temp_count_d; j++) {
             size_t temp_inf_d = strs->str_inform[i].inf;
