@@ -14,7 +14,7 @@ int inp_oup_ctrl(comms_opts *comm_opt) {
 
     if (fgets(buffer, 5, stdin) != NULL) {
         if (sscanf(buffer, "%ld", &temp_comm) == 1) {
-            if (temp_comm <= 5) {
+            if (temp_comm <= 5 || temp_comm == 9 || temp_comm == 8) {
                 comm_opt->opts = temp_comm;
             } else {
                 fprintf(stdout, "Error: incorrect input %ld\n",

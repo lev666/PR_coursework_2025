@@ -6,6 +6,8 @@
 #include "maxmindate.h"
 #include "minDate.h"
 #include "readaform.h"
+#include "splitsents.h"
+#include "sortsents.h"
 
 #define MEMFREEFAIL "Error: Memory is not free\n"
 
@@ -63,11 +65,18 @@ int main() {
 
     size_t command = comm_opt_ptr->opts;
 
-    if (command < 5) {
+    if (command < 5 || command == 9 || command == 8) {
         strs = (strs_all *)malloc(sizeof(strs_all));
         if (strs == NULL) {
             fprintf(stdout, "Error: Memory allocation error\n");
             return 0;
+        }
+        strs->str_inp = NULL;
+        if (command == 9) {
+            strs->str_inp = malloc(sizeof(char) * 102);
+            if (fgets(strs->str_inp, 102, stdin) == NULL) {
+			    return SUCCESS;
+			}
         }
         size_t read_a_format_r = read_a_format(strs);
         if (read_a_format_r) {
@@ -103,6 +112,18 @@ int main() {
         size_t max_min_date_r = max_min_date(strs);
         if (max_min_date_r) {
             return max_min_date_r;
+        }
+        break;
+    case 9:
+        ErrCode split_sent_r = split_sent(strs);
+        if (split_sent_r) {
+            return split_sent_r;
+        }
+        break;
+    case 8:
+        ErrCode sortsents_r = sortsents(strs);
+        if (sortsents_r) {
+            return sortsents_r;
         }
         break;
     case 5:
@@ -153,6 +174,9 @@ int free_strs(strs_all *strs) {
             free(strs->str_inform[i].dates_str);
             free(strs->str_inform[i].minDate);
             free(strs->str_inform[i].maxDate);
+        }
+        if (strs->str_inp != NULL) {
+            free(strs->str_inp);
         }
         free(strs->str_inform);
         free(strs);
