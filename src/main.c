@@ -8,6 +8,7 @@
 #include "readaform.h"
 #include "splitsents.h"
 #include "sortsents.h"
+#include "duplword.h"
 
 #define MEMFREEFAIL "Error: Memory is not free\n"
 
@@ -65,7 +66,7 @@ int main() {
 
     size_t command = comm_opt_ptr->opts;
 
-    if (command < 5 || command == 9 || command == 8) {
+    if (command < 10 && command != 5 && command != 6) {
         strs = (strs_all *)malloc(sizeof(strs_all));
         if (strs == NULL) {
             fprintf(stdout, "Error: Memory allocation error\n");
@@ -126,6 +127,12 @@ int main() {
             return sortsents_r;
         }
         break;
+    case 7:
+        size_t duplword_r = duplword(strs);
+        if (duplword_r) {
+            return duplword_r;
+        }
+        break;
     case 5:
         help_comm();
         break;
@@ -163,7 +170,13 @@ void help_comm() {
            "Предложения не выводятся, только строки в формате:"
            "'Earliest date: <date>' и 'Latest date: <date>'.\n\n"
            "  %1$s5%2$s\n"
-           "Справка об функциях исполняемой программы.\n",
+           "Справка об функциях исполняемой программы.\n"
+           "  %1$s7%2$s\n"
+           "Дублирование слов в stdout.\n"
+           "  %1$s8%2$s\n"
+           "Нахождение дубликатов предложений по вхождению слов.\n"
+           "  %1$s9%2$s\n"
+           "Мини-парсер по форматированию двух предложений из филлера, сеппаратор1/2.\n",
            BLUE, RESETCOLOR);
 }
 
