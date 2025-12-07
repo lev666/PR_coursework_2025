@@ -16,4 +16,4 @@
  * @param strs Входная структура текста.
  * @see @ref funcnum Входная функция под номером 4.
  */
-ErrCode max_min_date(strs_all* strs);
+err_code max_min_date(strs_all* strs);

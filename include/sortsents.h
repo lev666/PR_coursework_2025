@@ -1,4 +1,4 @@
 #pragma once
 #include "readaform.h"
 
-ErrCode sortsents(strs_all *strs);
+err_code sortsents(strs_all *strs);

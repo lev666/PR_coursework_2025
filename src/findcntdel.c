@@ -4,13 +4,15 @@
 #include <stdlib.h>
 
 #define MEMFAIL "Error: Memory allocation error\n"
+#define DATE_F 1801
+#define DATE_E 1901
 
 /**
  * @file findcntdel.c
  * @brief Исходник отвечающий за нахождение вхождения 19 века.
  */
 
-int find_cnt_del(strs_all *strs) {
+err_code find_cnt_del(strs_all *strs) {
     size_t c_in_cent = 0;
     size_t shift_ptr = 0;
 
@@ -18,20 +20,20 @@ int find_cnt_del(strs_all *strs) {
         size_t temp_count_d = strs->str_inform[i].date_c;
         for (size_t j = 0; j < temp_count_d; j++) {
             size_t temp_inf_d = strs->str_inform[i].inf;
-            if (temp_inf_d == 1) {
+            if (temp_inf_d == TRUE) {
                 break;
             } else {
                 int temp_year_d = strs->str_inform[i].dates_str[j].year;
 
-                if (temp_year_d >= 1801 && temp_year_d < 1901) {
+                if (temp_year_d >= DATE_F && temp_year_d < DATE_E) {
                     c_in_cent++;
                 }
             }
         }
         if (c_in_cent == temp_count_d) {
             free(strs->str_inform[i].dates_str);
-            free(strs->str_inform[i].minDate);
-            free(strs->str_inform[i].maxDate);
+            free(strs->str_inform[i].min_date);
+            free(strs->str_inform[i].max_date);
             free(strs->str_inform[i].str);
         } else {
             if (shift_ptr != i) {
@@ -49,5 +51,5 @@ int find_cnt_del(strs_all *strs) {
 
     strs->total_len = shift_ptr;
 
-    return 0;
+    return SUCCESS;
 }

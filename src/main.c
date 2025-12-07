@@ -2,13 +2,13 @@
 #include <stdlib.h>
 
 #include "control.h"
+#include "duplword.h"
 #include "findcntdel.h"
 #include "maxmindate.h"
-#include "minDate.h"
+#include "mindate.h"
 #include "readaform.h"
-#include "splitsents.h"
 #include "sortsents.h"
-#include "duplword.h"
+#include "splitsents.h"
 
 #define MEMFREEFAIL "Error: Memory is not free\n"
 
@@ -39,7 +39,7 @@ void help_comm();
  * @return Код возврата состояния.
  * @see main()
  */
-int free_strs(strs_all *strs);
+err_code free_strs(strs_all *strs);
 
 /**
  * @brief Главная функция исполнения.
@@ -76,8 +76,8 @@ int main() {
         if (command == 9) {
             strs->str_inp = malloc(sizeof(char) * 102);
             if (fgets(strs->str_inp, 102, stdin) == NULL) {
-			    return SUCCESS;
-			}
+                return SUCCESS;
+            }
         }
         size_t read_a_format_r = read_a_format(strs);
         if (read_a_format_r) {
@@ -90,45 +90,45 @@ int main() {
         print_sents(strs);
         break;
     case 1:
-        size_t curr_date_r = curr_date(strs);
+        err_code curr_date_r = curr_date(strs);
         if (curr_date_r) {
             return curr_date_r;
         }
         break;
     case 2:
-        size_t findMinDate_r = findMinDate(strs);
-        if (findMinDate_r) {
-            return findMinDate_r;
+        err_code find_min_date_r = find_min_date(strs);
+        if (find_min_date_r) {
+            return find_min_date_r;
         }
         print_sents(strs);
         break;
     case 3:
-        size_t findcntdel_r = find_cnt_del(strs);
+        err_code findcntdel_r = find_cnt_del(strs);
         if (findcntdel_r) {
             return findcntdel_r;
         }
         print_sents(strs);
         break;
     case 4:
-        size_t max_min_date_r = max_min_date(strs);
+        err_code max_min_date_r = max_min_date(strs);
         if (max_min_date_r) {
             return max_min_date_r;
         }
         break;
     case 9:
-        ErrCode split_sent_r = split_sent(strs);
+        err_code split_sent_r = split_sent(strs);
         if (split_sent_r) {
             return split_sent_r;
         }
         break;
     case 8:
-        ErrCode sortsents_r = sortsents(strs);
+        err_code sortsents_r = sortsents(strs);
         if (sortsents_r) {
             return sortsents_r;
         }
         break;
     case 7:
-        size_t duplword_r = duplword(strs);
+        err_code duplword_r = duplword(strs);
         if (duplword_r) {
             return duplword_r;
         }
@@ -139,11 +139,12 @@ int main() {
     }
 
     if (command != 5) {
-        size_t free_strs_r = free_strs(strs);
+        err_code free_strs_r = free_strs(strs);
         if (free_strs_r)
             return free_strs_r;
     }
 
+    free(comm_opt_ptr);
     return 0;
 }
 
@@ -176,17 +177,18 @@ void help_comm() {
            "  %1$s8%2$s\n"
            "Нахождение дубликатов предложений по вхождению слов.\n"
            "  %1$s9%2$s\n"
-           "Мини-парсер по форматированию двух предложений из филлера, сеппаратор1/2.\n",
+           "Мини-парсер по форматированию двух предложений из филлера, "
+           "сеппаратор1/2.\n",
            BLUE, RESETCOLOR);
 }
 
-int free_strs(strs_all *strs) {
+err_code free_strs(strs_all *strs) {
     if (strs != NULL && strs->str_inform != NULL) {
         for (size_t i = 0; i < strs->total_len; i++) {
             free(strs->str_inform[i].str);
             free(strs->str_inform[i].dates_str);
-            free(strs->str_inform[i].minDate);
-            free(strs->str_inform[i].maxDate);
+            free(strs->str_inform[i].min_date);
+            free(strs->str_inform[i].max_date);
         }
         if (strs->str_inp != NULL) {
             free(strs->str_inp);
@@ -195,5 +197,5 @@ int free_strs(strs_all *strs) {
         free(strs);
     }
 
-    return 0;
+    return SUCCESS;
 }

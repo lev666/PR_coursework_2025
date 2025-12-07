@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 /**
- * @file minDate.h
- * @brief Заголовок для исходника minDate.c.
+ * @file mindate.h
+ * @brief Заголовок для исходника mindate.c.
  */
 
 /**
@@ -16,4 +16,4 @@
  * @param strs Входная структура текста.
  * @see @ref funcnum Входная функция под номером 2.
  */
-ErrCode findMinDate(strs_all* strs);
+err_code find_min_date(strs_all* strs);

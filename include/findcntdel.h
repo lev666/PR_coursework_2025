@@ -16,4 +16,4 @@
  * @param strs Входная структура текста.
  * @see @ref funcnum Входная функция под номером 3.
  */
-int find_cnt_del(strs_all* strs);
+err_code find_cnt_del(strs_all* strs);

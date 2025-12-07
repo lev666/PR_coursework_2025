@@ -14,7 +14,7 @@
  * @note Это typedef для анонимной структуры.
  */
 typedef struct {
-    size_t opts : 4; /**< Номер функции (до 9 максимум) */
+    size_t opts : 4; /**< Номер функции (до 7 максимум) */
 } comms_opts;
 
 /**
@@ -24,4 +24,4 @@ typedef struct {
  * @param comm_opt Входная структура хранения номера функции.
  * @see @ref funcnum Допустимые значения.
  */
-int inp_oup_ctrl(comms_opts* comm_opt);
+err_code inp_oup_ctrl(comms_opts* comm_opt);

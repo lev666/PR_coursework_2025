@@ -26,8 +26,8 @@ typedef struct {
     size_t lenstr; /**< длина строки */
 
     dateStrs* dates_str; /**< Указатель на все вхождения дат в строку */
-    dateStrs* minDate; /**< Указатель на минимальную дату */
-    dateStrs* maxDate; /**< Указатель на максимальную дату */
+    dateStrs* min_date; /**< Указатель на минимальную дату */
+    dateStrs* max_date; /**< Указатель на максимальную дату */
     size_t inf; /**< Флаг бесконечности */
     size_t date_c; /**< Количество вхождений дат в строку */
 
@@ -39,7 +39,7 @@ typedef struct {
  * @note Это typedef для анонимной структуры.
  */
 typedef struct {
-    char* str_inp;
+    char* str_inp; /**< Строка для доп функций */
     str_inform_t* str_inform; /**< Указатель на строки */
     size_t total_len; /**< Количество строк */
 } strs_all;
@@ -63,7 +63,26 @@ typedef enum {
     ERR_MALLOC, /**< <1> */
     ERR_REALLOC, /**< <2> */
     ERR_INVALID_ARG /**< <3> */
-} ErrCode;
+} err_code;
+
+/**
+ * @brief Перечисление месяцев для читабельности.
+ * @note Это typedef для анонимного перечисления.
+ */
+typedef enum {
+    JAN = 1,
+    FEB = 2,
+    MARCH = 3,
+    APR = 4,
+    MAY = 5,
+    JUNE = 6,
+    JUL = 7,
+    AUGS = 8,
+    SEPT = 9,
+    OCTOB = 10,
+    NOVEM = 11,
+    DECEM = 12,
+} Months;
 
 /**
  * @brief Объявление функции для создания связного списка и заполнения.
@@ -71,7 +90,7 @@ typedef enum {
  * @return Возвращает код состояния @see main()
  * @param strs Входная структура текста.
  */
-ErrCode read_a_format(strs_all* strs);
+err_code read_a_format(strs_all* strs);
 
 /**
  * @brief Объявление функции для выделения памяти под Dynamic array.

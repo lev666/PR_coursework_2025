@@ -46,8 +46,8 @@ $(DBG_DIR)/%.o: src/%.c
 	mkdir -p $(DBG_DIR)
 	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) -c $< -o $@
 
-clang_format: $(SOURCE_FILES_DIST)
-	clang-format -style=file -i $(SOURCE_FILES_DIST)
+clang_format: $(SOURCES)
+	clang-format -style=file -i $(SOURCES)
 
 
 clean:

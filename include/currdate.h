@@ -16,4 +16,4 @@
  * @param strs Входная структура текста.
  * @see @ref funcnum Входная функция под номером 1.
  */
-int curr_date(strs_all* strs);
+err_code curr_date(strs_all* strs);

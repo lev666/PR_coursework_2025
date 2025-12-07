@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
-ErrCode duplword(strs_all* strs) {
+err_code duplword(strs_all *strs) {
     for (size_t i = 0; i < strs->total_len; i++) {
-        char* ptr = strs->str_inform[i].str;
+        char *ptr = strs->str_inform[i].str;
 
         int word_len = 0;
         int first = 0;
